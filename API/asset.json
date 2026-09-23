@@ -1,0 +1,327 @@
+[
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_school_001",
+    "type": "user",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "user_school_admin_001",
+        "role": "owner"
+      },
+      {
+        "email": "user_school_teacher_001",
+        "role": "editor"
+      },
+      {
+        "email": "user_school_student_001",
+        "role": "viewer"
+      }
+    ],
+    "data": {
+    },
+    "createdAt": "2026-08-11T10:00:00Z",
+    "updatedAt": "2026-08-11T10:00:00Z"
+  },
+  {
+    "ownerEmail": "school.admin@example.com",
+    "ownerId": "account_school_002",
+    "type": "user",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "school.admin@example.com",
+        "role": "owner"
+      },
+      {
+        "email": "teacher1@example.com",
+        "role": "editor"
+      }
+    ],
+    "data": {
+      "name": "Nusrat Jahan",
+      "email": "nusrat@example.com",
+      "phone": "01910000000",
+      "dateOfBirth": "2011-09-22",
+      "gender": "female",
+      "class": "9",
+      "section": "B",
+      "roll": 7,
+      "academicYear": "2026",
+      "guardian": {
+        "name": "Mahmud Jahan",
+        "phone": "01610000000",
+        "relationship": "father"
+      },
+      "address": {
+        "street": "45 College Road",
+        "city": "Mymensingh",
+        "district": "Mymensingh"
+      },
+      "status": "active"
+    },
+    "createdAt": "2026-08-12T08:30:00Z",
+    "updatedAt": "2026-08-12T08:30:00Z"
+  },
+  {
+    "ownerEmail": "admin@trainingcenter.com",
+    "ownerId": "account_tvet_001",
+    "type": "user",
+    "businessType": "tvet",
+    "access": [
+      {
+        "email": "admin@trainingcenter.com",
+        "role": "owner"
+      },
+      {
+        "email": "trainer1@trainingcenter.com",
+        "role": "editor"
+      },
+      {
+        "email": "student1@example.com",
+        "role": "viewer"
+      }
+    ],
+    "data": {
+      "name": "Hasan Ali",
+      "email": "hasan@example.com",
+      "phone": "01711111111",
+      "dateOfBirth": "2001-03-18",
+      "gender": "male",
+      "trade": "Computer Operation",
+      "course": "Computer Operation",
+      "level": "BNQF Level 3",
+      "batch": "CO-2026-01",
+      "studentId": "CO260001",
+      "trainingCenter": "MUSTI Mymensingh",
+      "enrollmentDate": "2026-01-15",
+      "completionDate": "2026-07-15",
+      "attendance": 91,
+      "assessmentStatus": "completed",
+      "status": "active"
+    },
+    "createdAt": "2026-08-10T09:00:00Z",
+    "updatedAt": "2026-08-10T09:00:00Z"
+  },
+  {
+    "ownerEmail": "admin@trainingcenter.com",
+    "ownerId": "account_tvet_002",
+    "type": "user",
+    "businessType": "tvet",
+    "access": [
+      {
+        "email": "admin@trainingcenter.com",
+        "role": "owner"
+      },
+      {
+        "email": "trainer2@trainingcenter.com",
+        "role": "editor"
+      }
+    ],
+    "data": {
+      "name": "Sadia Akter",
+      "email": "sadia@example.com",
+      "phone": "01822222222",
+      "dateOfBirth": "2003-07-11",
+      "gender": "female",
+      "trade": "Graphic Design",
+      "course": "Graphic Design",
+      "level": "NSDA Level 3",
+      "batch": "GD-2026-02",
+      "studentId": "GD260014",
+      "trainingCenter": "UCEP Bangladesh",
+      "enrollmentDate": "2026-02-01",
+      "attendance": 87,
+      "assessmentStatus": "in_progress",
+      "status": "active"
+    },
+    "createdAt": "2026-08-09T11:00:00Z",
+    "updatedAt": "2026-08-09T11:00:00Z"
+  },
+  {
+    "ownerEmail": "admin@fastnet.com",
+    "ownerId": "account_isp_001",
+    "type": "user",
+    "businessType": "isp",
+    "access": [
+      {
+        "email": "admin@fastnet.com",
+        "role": "owner"
+      },
+      {
+        "email": "support@fastnet.com",
+        "role": "editor"
+      },
+      {
+        "email": "customer1@example.com",
+        "role": "viewer"
+      }
+    ],
+    "data": {
+      "name": "Abdul Karim",
+      "email": "abdul@example.com",
+      "phone": "01733333333",
+      "customerId": "CUS-10001",
+      "connectionType": "fiber",
+      "package": "FastNet 50 Mbps",
+      "bandwidth": "50 Mbps",
+      "monthlyBill": 800,
+      "billingCycle": "monthly",
+      "installationDate": "2025-06-15",
+      "router": {
+        "brand": "TP-Link",
+        "model": "Archer C6",
+        "macAddress": "AA:BB:CC:DD:EE:01"
+      },
+      "connectionAddress": {
+        "street": "23 Mirpur Road",
+        "area": "Mirpur",
+        "city": "Dhaka",
+        "district": "Dhaka"
+      },
+      "paymentStatus": "paid",
+      "status": "active"
+    },
+    "createdAt": "2026-08-08T08:00:00Z",
+    "updatedAt": "2026-08-08T08:00:00Z"
+  },
+  {
+    "ownerEmail": "admin@fastnet.com",
+    "ownerId": "account_isp_002",
+    "type": "user",
+    "businessType": "isp",
+    "access": [
+      {
+        "email": "admin@fastnet.com",
+        "role": "owner"
+      },
+      {
+        "email": "support@fastnet.com",
+        "role": "editor"
+      }
+    ],
+    "data": {
+      "name": "Mizanur Rahman",
+      "email": "mizan@example.com",
+      "phone": "01944444444",
+      "customerId": "CUS-10002",
+      "connectionType": "fiber",
+      "package": "FastNet 100 Mbps",
+      "bandwidth": "100 Mbps",
+      "monthlyBill": 1200,
+      "billingCycle": "monthly",
+      "installationDate": "2026-01-20",
+      "router": {
+        "brand": "Huawei",
+        "model": "HG8145V5",
+        "macAddress": "AA:BB:CC:DD:EE:02"
+      },
+      "connectionAddress": {
+        "street": "8 Station Road",
+        "area": "Uttara",
+        "city": "Dhaka",
+        "district": "Dhaka"
+      },
+      "paymentStatus": "due",
+      "status": "active"
+    },
+    "createdAt": "2026-08-07T12:00:00Z",
+    "updatedAt": "2026-08-07T12:00:00Z"
+  },
+  {
+    "ownerEmail": "owner@rahmanshop.com",
+    "ownerId": "account_shop_001",
+    "type": "user",
+    "businessType": "shop",
+    "access": [
+      {
+        "email": "owner@rahmanshop.com",
+        "role": "owner"
+      },
+      {
+        "email": "manager@rahmanshop.com",
+        "role": "editor"
+      },
+      {
+        "email": "staff@rahmanshop.com",
+        "role": "viewer"
+      }
+    ],
+    "data": {
+      "name": "Rahman Electronics",
+      "email": "owner@rahmanshop.com",
+      "phone": "01755555555",
+      "shopName": "Rahman Electronics",
+      "category": "Electronics",
+      "address": {
+        "street": "22 New Market Road",
+        "area": "New Market",
+        "city": "Dhaka",
+        "district": "Dhaka"
+      },
+      "products": 245,
+      "employees": 6,
+      "monthlySales": 485000,
+      "currency": "BDT",
+      "openingHours": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "paymentMethods": [
+        "cash",
+        "bkash",
+        "nagad",
+        "card"
+      ],
+      "status": "active"
+    },
+    "createdAt": "2026-08-06T09:30:00Z",
+    "updatedAt": "2026-08-06T09:30:00Z"
+  },
+  {
+    "ownerEmail": "owner@fashionhouse.com",
+    "ownerId": "account_shop_002",
+    "type": "user",
+    "businessType": "shop",
+    "access": [
+      {
+        "email": "owner@fashionhouse.com",
+        "role": "owner"
+      },
+      {
+        "email": "manager@fashionhouse.com",
+        "role": "editor"
+      }
+    ],
+    "data": {
+      "name": "Fashion House",
+      "email": "owner@fashionhouse.com",
+      "phone": "01866666666",
+      "shopName": "Fashion House",
+      "category": "Clothing",
+      "address": {
+        "street": "15 Station Road",
+        "area": "Sadar",
+        "city": "Mymensingh",
+        "district": "Mymensingh"
+      },
+      "products": 520,
+      "employees": 9,
+      "monthlySales": 720000,
+      "currency": "BDT",
+      "openingHours": {
+        "open": "10:00",
+        "close": "22:00"
+      },
+      "paymentMethods": [
+        "cash",
+        "bkash",
+        "nagad",
+        "card"
+      ],
+      "status": "active"
+    },
+    "createdAt": "2026-08-05T14:00:00Z",
+    "updatedAt": "2026-08-05T14:00:00Z"
+  }
+]
