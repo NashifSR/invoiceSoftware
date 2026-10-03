@@ -1,26 +1,18 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-
 import { AuthProvider } from "@/Auth/context/AuthContext";
 import "./globals.css";
-import Navbar from "./sharedComponents/Navbar";
-import Footer from "./sharedComponents/Footer";
+import LayoutWrapper from "./sharedComponents/LayoutWrapper";
+
+export const metadata = {
+  title: "My App",
+  description: "App description",
+};
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-
-  const isDashboard =
-    pathname === "/dashboard" ||
-    pathname.startsWith("/dashboard/");
-
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         <AuthProvider>
-          {!isDashboard && <Navbar />}
-          {children}
-          {!isDashboard && <Footer/>}
+          <LayoutWrapper>{children}</LayoutWrapper>
         </AuthProvider>
       </body>
     </html>

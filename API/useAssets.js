@@ -20,13 +20,12 @@ const useAssets = ({ type } = {}) => {
     const [error, setError] = useState(null);
 
     const API_URL =
-        "http://localhost:5000/api/assets/data";
+        "https://myunifiedserver.onrender.com/api/assets/data";
 
     // =========================================================
     // CURRENT USER
     // =========================================================
 
-    console.group("checking user from useAsset",user)
 
     const currentUserEmail =
         user?.email

@@ -1,168 +1,117 @@
 "use client";
 
+import { useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import AssetForm from "@/API/ui/AssetForm";
-import { useContext } from "react";
 import { AuthContext } from "@/Auth/context/AuthContext";
 
 const UniversalDataCollectionTemplate = ({
-    initialData = {},
-    assetId = null,
-
-    title = "Universal Data Handler",
-    description = "Enter the information for this record.",
-
-    type = "data",
-    businessType = "general",
-    fields = [],
-
-    redirectTo = "/dashboard",
+  initialData = {},
+  assetId = null,
+  title = "Universal Data Handler",
+  description = "Enter the information for this record.",
+  type = "data",
+  businessType = "general",
+  fields = [],
+  redirectTo = "/dashboard",
+  onSuccessCallback = null,
 }) => {
+  const { user, loading: authLoading } = useContext(AuthContext);
+  const router = useRouter();
 
-    const {
-        user,
-        loading: authLoading,
-    } = useContext(AuthContext);
-    const router = useRouter();
+  // ============================================================
+  // AUTH LOADING STATE
+  // ============================================================
+  if (authLoading) {
+    return (
+      <div className="mx-auto max-w-2xl rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <div className="flex items-center gap-3 text-sm text-zinc-500">
+          <Loader2 size={18} className="animate-spin text-zinc-900" />
+          <span>Loading context...</span>
+        </div>
+      </div>
+    );
+  }
 
-    // ============================================================
-    // AUTH LOADING
-    // ============================================================
+  // ============================================================
+  // ASSET METADATA
+  // ============================================================
+  //
+  // Controls ownership and tracking properties while allowing
+  // AssetForm to deal solely with editable record payload.
+  //
+  // ============================================================
+  const buildMetadata = (isUpdate = false) => {
+    const now = new Date().toISOString();
 
-    if (authLoading) {
-        return (
-            <div className="mx-auto max-w-2xl rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <p className="text-sm text-zinc-500">
-                    Loading...
-                </p>
-            </div>
-        );
+    return {
+      ownerEmail: user?.email || null,
+      ownerId: user?.uid || null,
+      type,
+      businessType,
+      access: [
+        {
+          email: user?.email || null,
+          role: "owner",
+        },
+      ],
+      createdAt: isUpdate && initialData?.createdAt ? initialData.createdAt : now,
+      updatedAt: now,
+    };
+  };
+
+  const metadata = buildMetadata(Boolean(assetId));
+
+  // ============================================================
+  // INITIAL VALUES
+  // ============================================================
+  const initialValues = useMemo(() => {
+    return { ...initialData };
+  }, [initialData]);
+
+  // ============================================================
+  // SUCCESS HANDLER
+  // ============================================================
+  const handleSuccess = (result) => {
+    if (onSuccessCallback) {
+      onSuccessCallback(result);
+      return;
     }
 
-    // ============================================================
-    // ASSET METADATA
-    // ============================================================
-    //
-    // Everything outside `data` is metadata.
-    //
-    // This component controls the metadata while the actual
-    // form structure is supplied by the page using this component.
-    //
-    // Clients/users should only be able to modify `data`.
-    //
-    // ============================================================
+    console.log("Asset response:", result);
 
-    const metadata = {
-        // Dynamic
-        ownerEmail: user?.email,
-        ownerId: user?.uid,
+    if (redirectTo) {
+      router.push(redirectTo);
+    }
+  };
 
-        // Configured by the page
-        type,
-        businessType,
+  return (
+    <div className="mx-auto max-w-2xl rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
+      {/* Header */}
+      <div className="mb-6 border-b border-zinc-100 pb-5">
+        <h1 className="text-xl font-bold tracking-tight text-zinc-950 sm:text-2xl">
+          {title}
+        </h1>
+        {description && (
+          <p className="mt-1 text-sm text-zinc-500 leading-relaxed">
+            {description}
+          </p>
+        )}
+      </div>
 
-        // Dynamic
-        access: [
-            {
-                email: user?.email,
-                role: "owner",
-            },
-        ],
-
-        // Dynamic
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    };
-
-    console.group(
-        "metadata",
-        metadata
-    );
-
-    console.group(
-        "User ID",
-        user?.uid
-    );
-
-    // ============================================================
-    // INITIAL FORM DATA
-    // ============================================================
-    //
-    // For CREATE:
-    //     initialData = {}
-    //
-    // For UPDATE:
-    //     initialData contains the existing `data` object.
-    //
-    // Only data goes into AssetForm.
-    //
-    // Metadata is NOT mixed into initialData.
-    //
-    // ============================================================
-
-    const initialValues = {
-        ...initialData,
-    };
-
-    // ============================================================
-    // RENDER
-    // ============================================================
-
-    return (
-        <div className="mx-auto max-w-2xl rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
-            {/* Header */}
-            <div className="mb-6">
-                <h1 className="mb-2 text-xl font-semibold text-zinc-900">
-                    {title}
-                </h1>
-
-                <p className="text-sm text-zinc-500">
-                    {description}
-                </p>
-            </div>
-
-            {/* Form */}
-            <AssetForm
-                assetId={assetId}
-                fields={fields}
-                initialValues={initialValues}
-                submitLabel={
-                    assetId
-                        ? "Update Data Record"
-                        : "Save Data Record"
-                }
-
-                /*
-                 * Metadata belongs to the template.
-                 *
-                 * AssetForm receives it so the final payload
-                 * can be passed to the asset system.
-                 */
-                metadata={metadata}
-
-                onSuccess={(result) => {
-                    alert(
-                        assetId
-                            ? "Successfully updated data!"
-                            : "Successfully created data!"
-                    );
-
-                    console.log(
-                        "Asset response:",
-                        result
-                    );
-
-                    router.push(
-                        redirectTo
-                    );
-                }}
-
-                onCancel={() => {
-                    router.back();
-                }}
-            />
-        </div>
-    );
+      {/* Dynamic Asset Form */}
+      <AssetForm
+        assetId={assetId}
+        fields={fields}
+        initialValues={initialValues}
+        submitLabel={assetId ? "Update Data Record" : "Save Data Record"}
+        metadata={metadata}
+        onSuccess={handleSuccess}
+        onCancel={() => router.back()}
+      />
+    </div>
+  );
 };
 
 export default UniversalDataCollectionTemplate;

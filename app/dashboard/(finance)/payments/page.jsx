@@ -19,7 +19,7 @@ const Payments = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/payment");
+        const response = await axios.get("https://myunifiedserver.onrender.com/api/payment");
         setPayments(response.data);
       } catch (error) {
         console.error("Failed to fetch payments:", error);

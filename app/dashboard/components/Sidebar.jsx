@@ -53,8 +53,8 @@ const sidebarSections = [
         icon: FileText,
       },
       {
-        label: "Payment History",
-        href: "/dashboard/payments",
+        label: "Purchase History",
+        href: "/dashboard/purchasesPage",
         icon: Wallet,
       },
     ],

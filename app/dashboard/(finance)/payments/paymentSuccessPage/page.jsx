@@ -45,7 +45,7 @@ const PaymentSuccessPage = () => {
 
                     const response =
                         await axios.get(
-                            `http://localhost:5000/api/payment/status/${tranId}`
+                            `https://myunifiedserver.onrender.com/api/payment/status/${tranId}`
                         );
 
                     const paymentData =

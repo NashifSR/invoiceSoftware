@@ -15,17 +15,12 @@ const Items = () => {
         loading,
         error,
     } = useAssets({
-        type: "package",
+        type: "subscription",
     });
 
     const [addedItems, setAddedItems] =
         useState({});
 
-
-    console.group(
-        "Packages:",
-        assets
-    );
 
 
     const handleAddToCart = (item) => {
@@ -39,11 +34,6 @@ const Items = () => {
             type: item.type,
             quantity: 1,
         };
-
-        console.group(
-            "Adding item to cart:",
-            cartItem
-        );
 
 
         const existingCart =
