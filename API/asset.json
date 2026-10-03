@@ -24,13 +24,13 @@
     "updatedAt": "2026-08-11T10:00:00Z"
   },
   {
-    "ownerEmail": "school.admin@example.com",
+    "ownerEmail": "tvetucep@gmail.com",
     "ownerId": "account_school_002",
     "type": "user",
     "businessType": "school",
     "access": [
       {
-        "email": "school.admin@example.com",
+        "email": "tvetucep@gmail.com",
         "role": "owner"
       },
       {
@@ -64,13 +64,13 @@
     "updatedAt": "2026-08-12T08:30:00Z"
   },
   {
-    "ownerEmail": "admin@trainingcenter.com",
+    "ownerEmail": "tvetucep@gmail.com",
     "ownerId": "account_tvet_001",
     "type": "user",
     "businessType": "tvet",
     "access": [
       {
-        "email": "admin@trainingcenter.com",
+        "email": "tvetucep@gmail.com",
         "role": "owner"
       },
       {
@@ -104,13 +104,13 @@
     "updatedAt": "2026-08-10T09:00:00Z"
   },
   {
-    "ownerEmail": "admin@trainingcenter.com",
+    "ownerEmail": "tvetucep@gmail.com",
     "ownerId": "account_tvet_002",
     "type": "user",
     "businessType": "tvet",
     "access": [
       {
-        "email": "admin@trainingcenter.com",
+        "email": "tvetucep@gmail.com",
         "role": "owner"
       },
       {
@@ -323,5 +323,105 @@
     },
     "createdAt": "2026-08-05T14:00:00Z",
     "updatedAt": "2026-08-05T14:00:00Z"
+  },
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_school_001",
+    "type": "package",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "anyone",
+        "role": "anyone"
+      }
+    ],
+    "data": {
+      "name": "Basic Package",
+      "description": "Essential features for getting started.",
+      "amount": 1000,
+      "currency": "BDT"
+    },
+    "createdAt": "2026-08-11T10:00:00Z",
+    "updatedAt": "2026-08-11T10:00:00Z"
+  },
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_school_001",
+    "type": "package",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "anyone",
+        "role": "anyone"
+      }
+    ],
+    "data": {
+      "name": "Standard Package",
+      "description": "More features and greater access for growing organizations.",
+      "amount": 2500,
+      "currency": "BDT"
+    },
+    "createdAt": "2026-08-11T10:05:00Z",
+    "updatedAt": "2026-08-11T10:05:00Z"
+  },
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_school_001",
+    "type": "package",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "anyone",
+        "role": "anyone"
+      }
+    ],
+    "data": {
+      "name": "Professional Package",
+      "description": "Advanced features for professional users and institutions.",
+      "amount": 5000,
+      "currency": "BDT"
+    },
+    "createdAt": "2026-08-11T10:10:00Z",
+    "updatedAt": "2026-08-11T10:10:00Z"
+  },
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_school_001",
+    "type": "package",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "anyone",
+        "role": "anyone"
+      }
+    ],
+    "data": {
+      "name": "Business Package",
+      "description": "Comprehensive tools and access for larger organizations.",
+      "amount": 10000,
+      "currency": "BDT"
+    },
+    "createdAt": "2026-08-11T10:15:00Z",
+    "updatedAt": "2026-08-11T10:15:00Z"
+  },
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_school_001",
+    "type": "package",
+    "businessType": "school",
+    "access": [
+      {
+        "email": "anyone",
+        "role": "anyone"
+      }
+    ],
+    "data": {
+      "name": "Enterprise Package",
+      "description": "Full-featured package designed for enterprise-level organizations.",
+      "amount": 25000,
+      "currency": "BDT"
+    },
+    "createdAt": "2026-08-11T10:20:00Z",
+    "updatedAt": "2026-08-11T10:20:00Z"
   }
 ]

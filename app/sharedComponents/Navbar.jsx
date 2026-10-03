@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   ChevronDown,
@@ -26,6 +26,11 @@ const navItems = [
     icon: LayoutDashboard,
   },
   {
+    label: "Items",
+    href: "/items",
+    icon: LayoutDashboard,
+  },
+  {
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
@@ -43,10 +48,81 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Cart state (can be lifted or moved to Context later)
-  const [cartItems, setCartItems] = useState([
-    { id: "item_1", name: "Asset Plan Upgrade", price: 1000, quantity: 1 }
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const [hasCartItems, setHasCartItems] = useState(false);
+
+  useEffect(() => {
+    const checkCart = () => {
+      try {
+        const storedCart = JSON.parse(
+          localStorage.getItem("cart") || "[]"
+        );
+
+        setHasCartItems(
+          Array.isArray(storedCart) &&
+          storedCart.length > 0
+        );
+      } catch (error) {
+        console.error(
+          "Failed to check cart:",
+          error
+        );
+
+        setHasCartItems(false);
+      }
+    };
+
+    checkCart();
+
+    window.addEventListener(
+      "cartUpdated",
+      checkCart
+    );
+
+    return () => {
+      window.removeEventListener(
+        "cartUpdated",
+        checkCart
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadCart = () => {
+      try {
+        const storedCart = JSON.parse(
+          localStorage.getItem("cart") || "[]"
+        );
+
+        setCartItems(
+          Array.isArray(storedCart)
+            ? storedCart
+            : []
+        );
+      } catch (error) {
+        console.error(
+          "Failed to load cart:",
+          error
+        );
+
+        setCartItems([]);
+      }
+    };
+
+    loadCart();
+
+    window.addEventListener(
+      "cartUpdated",
+      loadCart
+    );
+
+    return () => {
+      window.removeEventListener(
+        "cartUpdated",
+        loadCart
+      );
+    };
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -101,7 +177,7 @@ const Navbar = () => {
 
           {/* Right Side Actions: Cart & Auth */}
           <div className="flex items-center gap-3">
-            
+
             {/* Cart Trigger Button */}
             <button
               type="button"
@@ -109,11 +185,13 @@ const Navbar = () => {
               className="relative flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
             >
               <ShoppingCart size={17} />
-              <span className="hidden sm:inline">Cart</span>
-              {cartItems.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-950 text-[10px] font-bold text-white">
-                  {cartItems.length}
-                </span>
+
+              <span className="hidden sm:inline">
+                Cart
+              </span>
+
+              {hasCartItems && (
+                <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
               )}
             </button>
 
@@ -133,6 +211,7 @@ const Navbar = () => {
                     <p className="max-w-32 truncate text-sm font-semibold text-zinc-900">
                       {displayName}
                     </p>
+
                     <p className="max-w-32 truncate text-xs text-zinc-500">
                       {user?.email}
                     </p>
@@ -158,11 +237,13 @@ const Navbar = () => {
                     />
 
                     <div className="absolute right-0 top-12 z-50 w-60 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg">
+
                       {/* User Info */}
                       <div className="border-b border-zinc-100 px-4 py-3">
                         <p className="truncate text-sm font-semibold text-zinc-900">
                           {displayName}
                         </p>
+
                         <p className="truncate text-xs text-zinc-500">
                           {user?.email}
                         </p>
@@ -190,6 +271,7 @@ const Navbar = () => {
                           Sign out
                         </button>
                       </div>
+
                     </div>
                   </>
                 )}

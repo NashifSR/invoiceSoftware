@@ -9,7 +9,7 @@ const ManageSubscription = () => {
         <div>
 
             <AssetManager
-                type="Subscription"
+                type="package"
                 title="Manage Assets"
             />
         </div>

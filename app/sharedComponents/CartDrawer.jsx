@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
-import axios from "axios";
+import React, {
+  useEffect,
+} from "react";
+import { useRouter } from "next/navigation";
 import {
   X,
   Trash2,
   ShoppingBag,
   ArrowRight,
-  CreditCard,
 } from "lucide-react";
 
 const CartDrawer = ({
@@ -16,186 +17,283 @@ const CartDrawer = ({
   cartItems = [],
   setCartItems,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+
+  /* ============================================================
+     LOAD CART FROM LOCAL STORAGE
+  ============================================================ */
+
+  useEffect(() => {
+
+    if (!isOpen) {
+      return;
+    }
+
+
+    const storedCart =
+      JSON.parse(
+        localStorage.getItem(
+          "cart"
+        ) || "[]"
+      );
+
+
+    const combinedCart =
+      storedCart.reduce(
+        (items, item) => {
+
+          const existingItem =
+            items.find(
+              (currentItem) =>
+                currentItem.id ===
+                item.id
+            );
+
+
+          if (existingItem) {
+
+            existingItem.quantity +=
+              Number(
+                item.quantity || 1
+              );
+
+          } else {
+
+            items.push({
+              ...item,
+              quantity:
+                Number(
+                  item.quantity || 1
+                ),
+            });
+
+          }
+
+
+          return items;
+
+        },
+        []
+      );
+
+
+    setCartItems(
+      combinedCart
+    );
+
+
+  }, [
+    isOpen,
+    setCartItems,
+  ]);
+
+
+  /* ============================================================
+     SUBTOTAL
+  ============================================================ */
+
+  const subtotal =
+    cartItems.reduce(
+      (total, item) => {
+
+        const quantity =
+          Number(
+            item.quantity || 0
+          );
+
+        const amount =
+          Number(
+            item.amount || 0
+          );
+
+        return (
+          total +
+          amount *
+            quantity
+        );
+
+      },
+      0
+    );
+
+
+  /* ============================================================
+     INCREASE QUANTITY
+  ============================================================ */
+
+  const handleIncrease = (id) => {
+
+    const updatedItems =
+      cartItems.map(
+        (item) =>
+          item.id === id
+            ? {
+                ...item,
+                quantity:
+                  Number(
+                    item.quantity || 1
+                  ) + 1,
+              }
+            : item
+      );
+
+
+    setCartItems(
+      updatedItems
+    );
+
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(
+        updatedItems
+      )
+    );
+
+
+    window.dispatchEvent(
+      new Event(
+        "cartUpdated"
+      )
+    );
+
+  };
+
+
+  /* ============================================================
+     DECREASE QUANTITY
+  ============================================================ */
+
+  const handleDecrease = (id) => {
+
+    const updatedItems =
+      cartItems
+        .map(
+          (item) =>
+            item.id === id
+              ? {
+                  ...item,
+                  quantity:
+                    Number(
+                      item.quantity || 1
+                    ) - 1,
+                }
+              : item
+        )
+        .filter(
+          (item) =>
+            Number(
+              item.quantity || 0
+            ) > 0
+        );
+
+
+    setCartItems(
+      updatedItems
+    );
+
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(
+        updatedItems
+      )
+    );
+
+
+    window.dispatchEvent(
+      new Event(
+        "cartUpdated"
+      )
+    );
+
+  };
+
 
   /* ============================================================
      REMOVE ITEM
   ============================================================ */
 
   const handleRemove = (id) => {
-    setCartItems((currentItems) =>
-      currentItems.filter(
-        (item) => item.id !== id
+
+    const updatedItems =
+      cartItems.filter(
+        (item) =>
+          item.id !== id
+      );
+
+
+    setCartItems(
+      updatedItems
+    );
+
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(
+        updatedItems
       )
     );
+
+
+    window.dispatchEvent(
+      new Event(
+        "cartUpdated"
+      )
+    );
+
   };
 
-  /* ============================================================
-     TOTAL
-  ============================================================ */
-
-  const totalAmount = cartItems.reduce(
-    (sum, item) =>
-      sum +
-      Number(item.price || 0) *
-        Number(item.quantity || 0),
-    0
-  );
 
   /* ============================================================
      CHECKOUT
   ============================================================ */
 
-  const handleCheckout = async () => {
-    if (cartItems.length === 0) {
-      return;
-    }
+  // const handleCheckout = () => {
 
-    try {
-      setLoading(true);
+  //   if (
+  //     cartItems.length === 0
+  //   ) {
+  //     return;
+  //   }
 
-      /* ========================================================
-         PAYMENT PAYLOAD
 
-         These are currently placeholders.
+  //   onClose();
 
-         Later we can replace the customer information with
-         the authenticated user's profile asset.
-      ======================================================== */
 
-      const paymentPayload = {
-        tran_id: `TXN_${Date.now()}`,
+  //   router.push(
+  //     "/dashboard/checkoutpage"
+  //   );
 
-        total_amount: totalAmount,
+  // };
 
-        cus_name: "Ahmed Nashif",
-        cus_email: "nashif@example.com",
-        cus_phone: "01700000000",
-      };
+  const handleCheckout = () => {
 
-      console.log(
-        "PAYMENT REQUEST:",
-        paymentPayload
-      );
+  if (
+    cartItems.length === 0
+  ) {
+    return;
+  }
 
-      /* ========================================================
-         SEND TO BACKEND
-      ======================================================== */
 
-      const response = await axios.post(
-        "http://localhost:5000/api/payment/init",
-        paymentPayload
-      );
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(
+      cartItems
+    )
+  );
 
-      console.log(
-        "PAYMENT RESPONSE:",
-        response.data
-      );
 
-      /* ========================================================
-         GATEWAY URL
+  onClose();
 
-         Depending on your backend implementation, it may return:
 
-         {
-           url: "..."
-         }
+  router.push(
+    "/dashboard/checkoutpage"
+  );
 
-         OR SSLCommerz's:
+};
 
-         {
-           GatewayPageURL: "..."
-         }
-      ======================================================== */
-
-      const gatewayUrl =
-        response.data?.url ||
-        response.data?.GatewayPageURL;
-
-      if (!gatewayUrl) {
-
-        console.error(
-          "Gateway URL missing:",
-          response.data
-        );
-
-        alert(
-          "Payment gateway did not return a redirect URL."
-        );
-
-        return;
-      }
-
-      /* ========================================================
-         REDIRECT TO SSLCommerz
-      ======================================================== */
-
-      window.location.href =
-        gatewayUrl;
-
-    } catch (error) {
-
-      console.error(
-        "CHECKOUT ERROR:",
-        error
-      );
-
-      /* ========================================================
-         BACKEND ERROR
-      ======================================================== */
-
-      console.error(
-        "BACKEND RESPONSE:",
-        error?.response?.data
-      );
-
-      console.error(
-        "STATUS:",
-        error?.response?.status
-      );
-
-      console.error(
-        "REQUEST:",
-        error?.config
-      );
-
-      /* ========================================================
-         ERROR MESSAGE
-      ======================================================== */
-
-      const backendMessage =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error?.response?.data?.msg;
-
-      if (backendMessage) {
-
-        alert(
-          backendMessage
-        );
-
-      } else if (
-        error?.response?.status
-      ) {
-
-        alert(
-          `Payment initialization failed. Server returned ${error.response.status}.`
-        );
-
-      } else {
-
-        alert(
-          "Unable to connect to the payment server."
-        );
-
-      }
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
 
   /* ============================================================
      CLOSED
@@ -205,11 +303,13 @@ const CartDrawer = ({
     return null;
   }
 
+
   /* ============================================================
      UI
   ============================================================ */
 
   return (
+
     <div className="fixed inset-0 z-50 overflow-hidden">
 
       {/* ========================================================
@@ -239,14 +339,26 @@ const CartDrawer = ({
 
             <div className="flex items-center gap-2.5">
 
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-950 text-white">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-950 text-white">
 
-                <ShoppingBag size={18} />
+                <ShoppingBag
+                  size={18}
+                />
+
+
+                {cartItems.length > 0 && (
+
+                  <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+
+                )}
 
               </div>
 
+
               <h2 className="text-base font-bold text-zinc-950">
+
                 Your Cart
+
               </h2>
 
             </div>
@@ -255,9 +367,8 @@ const CartDrawer = ({
             <button
               type="button"
               onClick={onClose}
-              disabled={loading}
               aria-label="Close cart"
-              className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 disabled:opacity-50"
+              className="rounded-lg p-1.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700"
             >
 
               <X size={20} />
@@ -282,86 +393,158 @@ const CartDrawer = ({
                   className="mb-3 text-zinc-300"
                 />
 
+
                 <p className="text-sm font-medium">
+
                   Your cart is empty
+
                 </p>
 
+
                 <p className="mt-1 text-xs text-zinc-400">
-                  Add items to proceed to checkout.
+
+                  Add items to proceed
+                  to checkout.
+
                 </p>
 
               </div>
 
             ) : (
 
-              cartItems.map((item) => {
+              cartItems.map(
+                (item, index) => {
 
-                const quantity =
-                  Number(item.quantity || 0);
+                  const quantity =
+                    Number(
+                      item.quantity || 0
+                    );
 
-                const price =
-                  Number(item.price || 0);
 
-                const itemTotal =
-                  price * quantity;
+                  const amount =
+                    Number(
+                      item.amount || 0
+                    );
 
-                return (
 
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between py-4"
-                  >
+                  const itemTotal =
+                    amount *
+                    quantity;
 
-                    {/* Item information */}
 
-                    <div className="min-w-0">
+                  return (
 
-                      <h3 className="truncate text-sm font-semibold text-zinc-900">
+                    <div
+                      key={`${item.id}-${index}`}
+                      className="flex items-center justify-between py-4"
+                    >
 
-                        {item.name}
+                      <div className="min-w-0">
 
-                      </h3>
+                        <h3 className="truncate text-sm font-semibold text-zinc-900">
 
-                      <p className="mt-0.5 text-xs text-zinc-500">
+                          {item.name}
 
-                        Qty: {quantity}
+                        </h3>
 
-                      </p>
+
+                        {/* Quantity Controls */}
+
+                        <div className="mt-2 flex items-center gap-2">
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleDecrease(
+                                item.id
+                              )
+                            }
+                            aria-label={`Decrease ${item.name}`}
+                            className="flex h-7 w-7 items-center justify-center rounded-md border border-zinc-200 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100"
+                          >
+
+                            −
+
+                          </button>
+
+
+                          <span className="min-w-6 text-center text-sm font-medium text-zinc-700">
+
+                            {quantity}
+
+                          </span>
+
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleIncrease(
+                                item.id
+                              )
+                            }
+                            aria-label={`Increase ${item.name}`}
+                            className="flex h-7 w-7 items-center justify-center rounded-md border border-zinc-200 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100"
+                          >
+
+                            +
+
+                          </button>
+
+
+                          <span className="ml-2 text-xs text-zinc-500">
+
+                            BDT{" "}
+                            {amount.toFixed(
+                              2
+                            )}{" "}
+                            each
+
+                          </span>
+
+                        </div>
+
+                      </div>
+
+
+                      <div className="ml-4 flex shrink-0 items-center gap-4">
+
+                        <span className="text-sm font-bold text-zinc-900">
+
+                          BDT{" "}
+                          {itemTotal.toFixed(
+                            2
+                          )}
+
+                        </span>
+
+
+                        {/* Remove Entire Item */}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemove(
+                              item.id
+                            )
+                          }
+                          aria-label={`Remove ${item.name}`}
+                          className="text-zinc-400 transition hover:text-red-600"
+                        >
+
+                          <Trash2
+                            size={16}
+                          />
+
+                        </button>
+
+                      </div>
 
                     </div>
 
+                  );
 
-                    {/* Price + remove */}
-
-                    <div className="ml-4 flex shrink-0 items-center gap-4">
-
-                      <span className="text-sm font-bold text-zinc-900">
-
-                        BDT {itemTotal.toFixed(2)}
-
-                      </span>
-
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleRemove(item.id)
-                        }
-                        disabled={loading}
-                        aria-label={`Remove ${item.name}`}
-                        className="text-zinc-400 transition hover:text-red-600 disabled:opacity-50"
-                      >
-
-                        <Trash2 size={16} />
-
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                );
-              })
+                }
+              )
 
             )}
 
@@ -376,58 +559,50 @@ const CartDrawer = ({
 
             <div className="border-t border-zinc-100 bg-zinc-50/50 p-5">
 
-              {/* Subtotal */}
-
               <div className="mb-4 flex items-center justify-between">
 
                 <span className="text-sm font-medium text-zinc-600">
+
                   Subtotal
+
                 </span>
 
+
                 <span className="text-xl font-bold text-zinc-950">
-                  BDT {totalAmount.toFixed(2)}
+
+                  BDT{" "}
+                  {subtotal.toFixed(
+                    2
+                  )}
+
                 </span>
 
               </div>
 
 
-              {/* Checkout */}
-
               <button
                 type="button"
-                onClick={handleCheckout}
-                disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+                onClick={
+                  handleCheckout
+                }
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800"
               >
 
-                {loading ? (
+                <span>
+                  Proceed to Checkout
+                </span>
 
-                  <span>
-                    Connecting to Gateway...
-                  </span>
 
-                ) : (
-
-                  <>
-                    <CreditCard size={16} />
-
-                    <span>
-                      Pay with SSLCommerz
-                    </span>
-
-                    <ArrowRight size={16} />
-                  </>
-
-                )}
+                <ArrowRight
+                  size={16}
+                />
 
               </button>
 
 
-              {/* Security message */}
-
               <p className="mt-3 text-center text-[11px] text-zinc-400">
 
-                🔒 Secure SSLCommerz encrypted gateway
+                Secure checkout
 
               </p>
 
@@ -440,7 +615,9 @@ const CartDrawer = ({
       </div>
 
     </div>
+
   );
+
 };
 
 export default CartDrawer;
