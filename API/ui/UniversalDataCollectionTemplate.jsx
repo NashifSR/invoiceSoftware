@@ -12,7 +12,7 @@ const UniversalDataCollectionTemplate = ({
   title = "Universal Data Handler",
   description = "Enter the information for this record.",
   type = "data",
-  businessType = "general",
+  business = "general",
   fields = [],
   redirectTo = "/dashboard",
   onSuccessCallback = null,
@@ -49,7 +49,7 @@ const UniversalDataCollectionTemplate = ({
       ownerEmail: user?.email || null,
       ownerId: user?.uid || null,
       type,
-      businessType,
+      business,
       access: [
         {
           email: user?.email || null,

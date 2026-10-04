@@ -13,6 +13,12 @@ import {
   Loader2,
   AlertCircle,
   RefreshCw,
+  Globe,
+  Key,
+  BadgeCheck,
+  CreditCard,
+  Layers,
+  Image as ImageIcon,
 } from "lucide-react";
 
 import { auth } from "@/Auth/lib/firebase";
@@ -20,80 +26,120 @@ import useAssets from "@/API/useAssets";
 import UniversalDataCollectionTemplate from "@/API/ui/UniversalDataCollectionTemplate";
 
 /* ============================================================
-   PROFILE FORM FIELDS CONFIGURATION
+   MULTI-TENANT SAAS PROFILE FIELDS (WITH DIRECT IMAGE UPLOAD)
 ============================================================ */
 
 const PROFILE_FIELDS = [
   {
-    name: "name",
-    label: "Full Name",
+    name: "displayName",
+    label: "Account Admin Name",
     type: "text",
-    placeholder: "Enter your full name",
+    placeholder: "e.g., Alex Johnson",
+    required: true,
+  },
+  {
+    name: "organizationName",
+    label: "Organization / Business Name",
+    type: "text",
+    placeholder: "e.g., OptiVista Digital or SpeedNet ISP",
     required: true,
   },
   {
     name: "phone",
-    label: "Phone Number",
+    label: "Primary Phone Number",
     type: "tel",
-    placeholder: "+1 (555) 000-0000",
+    placeholder: "+880 1700-000000",
   },
   {
-    name: "businessType",
-    label: "Account Type",
+    name: "accountType",
+    label: "Business Vertical / Workspace Type",
     type: "select",
     options: [
-      { value: "school", label: "School" },
-      { value: "training_center", label: "Training Center" },
-      { value: "business", label: "Business" },
-      { value: "individual", label: "Individual" },
+      { value: "individual", label: "Individual / Freelancer" },
+      { value: "business", label: "Commercial / General Business" },
+      { value: "isp", label: "ISP & Broadband Provider" },
+      { value: "tvet", label: "TVET / Training Institute" },
+      { value: "agency", label: "Digital Marketing / Tech Agency" },
     ],
     required: true,
+  },
+  {
+    name: "currency",
+    label: "Default Billing Currency",
+    type: "select",
+    options: [
+      { value: "BDT", label: "BDT (৳) - Bangladeshi Taka" },
+      { value: "USD", label: "USD ($) - US Dollar" },
+      { value: "EUR", label: "EUR (€) - Euro" },
+    ],
+    required: true,
+  },
+  {
+    name: "website",
+    label: "Primary Website / Domain",
+    type: "url",
+    placeholder: "https://yourdomain.com",
+  },
+  {
+    name: "logoUrl",
+    label: "Workspace Logo / Profile Image",
+    type: "image", // Triggers direct file upload in UniversalDataCollectionTemplate
+    placeholder: "Upload company logo or profile picture",
+  },
+  {
+    name: "taxId",
+    label: "BIN / Tax Identification Number",
+    type: "text",
+    placeholder: "e.g., BIN-123456789",
   },
 ];
 
 /* ============================================================
-   ACCOUNT TYPE MAPPER (LABEL & BADGE STYLES)
+   ACCOUNT TYPE BADGES
 ============================================================ */
 
 const ACCOUNT_TYPE_MAP = {
-  school: { label: "School", color: "bg-blue-50 text-blue-700 border-blue-200" },
-  training_center: { label: "Training Center", color: "bg-purple-50 text-purple-700 border-purple-200" },
-  business: { label: "Business", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
   individual: { label: "Individual", color: "bg-zinc-100 text-zinc-700 border-zinc-200" },
+  business: { label: "Business", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+  isp: { label: "ISP Provider", color: "bg-blue-50 text-blue-700 border-blue-200" },
+  tvet: { label: "TVET Institute", color: "bg-amber-50 text-amber-700 border-amber-200" },
+  agency: { label: "Agency", color: "bg-purple-50 text-purple-700 border-purple-200" },
 };
 
 /* ============================================================
-   AVATAR COMPONENT WITH BROKEN IMAGE FALLBACK
+   AVATAR / LOGO COMPONENT WITH FALLBACK
 ============================================================ */
 
-const UserAvatar = ({ photoURL, name, email }) => {
+const WorkspaceAvatar = ({ logoUrl, photoURL, name, email }) => {
   const [imgError, setImgError] = useState(false);
 
   const fallbackLetter = useMemo(() => {
-    return (name || email || "?").charAt(0).toUpperCase();
+    return (name || email || "U").charAt(0).toUpperCase();
   }, [name, email]);
 
-  if (photoURL && !imgError) {
+  const activeImage = logoUrl || photoURL;
+
+  if (activeImage && !imgError) {
     return (
       <img
-        src={photoURL}
-        alt={name || "Profile Avatar"}
+        src={activeImage}
+        alt={name || "Workspace Avatar"}
         referrerPolicy="no-referrer"
         onError={() => setImgError(true)}
-        className="h-14 w-14 rounded-full border border-zinc-200 object-cover shadow-sm shrink-0"
+        className="h-16 w-16 rounded-xl border border-zinc-200 object-cover shadow-sm shrink-0"
       />
     );
   }
 
   return (
-    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-base font-semibold text-white shadow-sm select-none">
+    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-zinc-900 text-lg font-semibold text-white shadow-sm select-none">
       {fallbackLetter}
     </div>
   );
 };
 
 /* ============================================================
-   PROFILE COMPONENT
+   SAAS WORKSPACE & USER PROFILE
 ============================================================ */
 
 const Profile = () => {
@@ -108,10 +154,10 @@ const Profile = () => {
     loading: assetsLoading,
     error: assetsError,
     getAssets,
-  } = useAssets({ type: "user" });
+  } = useAssets({ type: "user_profile" });
 
   /* ========================================================
-      FIREBASE AUTH LISTENER
+     FIREBASE AUTH LISTENER
   ======================================================== */
 
   useEffect(() => {
@@ -124,21 +170,18 @@ const Profile = () => {
   }, []);
 
   /* ========================================================
-      FIND USER PROFILE ASSET
+     FIND USER PROFILE ASSET
   ======================================================== */
 
   useEffect(() => {
     if (!user || !assets) return;
 
     const existingProfile = assets.find((asset) => {
-      const matchesType = asset.type === "user";
+      const matchesType = asset.type === "user_profile" || asset.type === "user";
       const matchesEmail = asset.ownerEmail === user.email;
       const matchesUid = asset.ownerId === user.uid;
-      const matchesAccess = asset.access?.some(
-        (acc) => acc.email === user.email || acc.uid === user.uid
-      );
 
-      return matchesType && (matchesEmail || matchesUid || matchesAccess);
+      return matchesType && (matchesEmail || matchesUid);
     });
 
     setProfileAsset(existingProfile || null);
@@ -147,19 +190,24 @@ const Profile = () => {
   const profileData = useMemo(() => profileAsset?.data || {}, [profileAsset]);
 
   /* ========================================================
-      INITIAL DATA MEMO FOR UNIVERSAL TEMPLATE
+     INITIAL DATA MEMO
   ======================================================== */
 
   const formInitialData = useMemo(() => {
     return {
-      name: profileData.name || user?.displayName || "",
+      displayName: profileData.displayName || user?.displayName || "",
+      organizationName: profileData.organizationName || "",
       phone: profileData.phone || "",
-      businessType: profileData.businessType || "individual",
+      accountType: profileData.accountType || "business",
+      currency: profileData.currency || "BDT",
+      website: profileData.website || "",
+      logoUrl: profileData.logoUrl || "",
+      taxId: profileData.taxId || "",
     };
   }, [profileData, user]);
 
   /* ========================================================
-      LOADING STATE
+     LOADING STATE
   ======================================================== */
 
   if (authLoading || (assetsLoading && !profileAsset)) {
@@ -167,14 +215,14 @@ const Profile = () => {
       <main className="min-h-screen bg-zinc-50/50 p-6">
         <div className="mx-auto flex max-w-4xl items-center justify-center gap-2.5 py-24 text-sm text-zinc-500">
           <Loader2 className="h-5 w-5 animate-spin text-zinc-400" />
-          <span>Loading profile information...</span>
+          <span>Loading SaaS tenant profile...</span>
         </div>
       </main>
     );
   }
 
   /* ========================================================
-      UNAUTHENTICATED STATE
+     UNAUTHENTICATED STATE
   ======================================================== */
 
   if (!user) {
@@ -188,7 +236,7 @@ const Profile = () => {
             Authentication Required
           </h2>
           <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-            You must be logged in to view and manage your profile details.
+            Sign in to access your tenant dashboard and account preferences.
           </p>
         </div>
       </main>
@@ -196,20 +244,22 @@ const Profile = () => {
   }
 
   /* ========================================================
-      MAIN RENDER
+     MAIN RENDER
   ======================================================== */
 
   return (
     <main className="min-h-screen bg-zinc-50/50 p-6">
       <div className="mx-auto max-w-4xl space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
-            Account Profile
-          </h1>
-          <p className="mt-1 text-xs text-zinc-500">
-            Manage your personal credentials and application preferences.
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+              SaaS Tenant & Profile Settings
+            </h1>
+            <p className="mt-1 text-xs text-zinc-500">
+              Manage core workspace identity, active modules, and gateway preferences.
+            </p>
+          </div>
         </div>
 
         {/* Global Fetch Error Banner */}
@@ -218,7 +268,7 @@ const Profile = () => {
             <div className="flex items-center gap-2.5">
               <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
               <span>
-                {assetsError.message || "Failed to sync profile data from server."}
+                {assetsError.message || "Failed to sync profile information."}
               </span>
             </div>
             {getAssets && (
@@ -235,26 +285,27 @@ const Profile = () => {
         )}
 
         {/* ============================================================
-            1. AUTHENTICATED FIREBASE ACCOUNT CARD
+            1. AUTHENTICATED CREDENTIALS & LOGO CARD
         ============================================================ */}
         <section className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
           <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-4">
             <span className="text-xs font-semibold text-zinc-700">
-              Authentication Credentials
+              System Admin Credentials
             </span>
           </div>
 
           <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
-              <UserAvatar
+              <WorkspaceAvatar
+                logoUrl={profileData.logoUrl}
                 photoURL={user.photoURL}
-                name={user.displayName}
+                name={profileData.organizationName || profileData.displayName || user.displayName}
                 email={user.email}
               />
 
               <div>
                 <h2 className="text-base font-semibold text-zinc-900">
-                  {user.displayName || "Anonymous User"}
+                  {profileData.organizationName || profileData.displayName || user.displayName || "Workspace Owner"}
                 </h2>
                 <p className="text-xs text-zinc-500">{user.email}</p>
               </div>
@@ -262,37 +313,38 @@ const Profile = () => {
 
             <div className="inline-flex items-center gap-1.5 self-start rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-medium text-emerald-700 border border-emerald-200 sm:self-center">
               <ShieldCheck size={13} />
-              <span>Verified Identity</span>
+              <span>Verified Account</span>
             </div>
           </div>
 
           <div className="divide-y divide-zinc-100 border-t border-zinc-100">
             <ProfileRow
-              icon={<User size={14} />}
-              label="Display Name"
-              value={user.displayName || "Not configured"}
+              icon={<Mail size={14} />}
+              label="Admin Email"
+              value={user.email}
             />
             <ProfileRow
-              icon={<Mail size={14} />}
-              label="Email Address"
-              value={user.email}
+              icon={<Key size={14} />}
+              label="Tenant / Owner UID"
+              value={user.uid}
+              mono={true}
             />
           </div>
         </section>
 
         {/* ============================================================
-            2. APPLICATION PROFILE CARD
+            2. APPLICATION & TENANT METADATA CARD
         ============================================================ */}
         <section className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
           <div className="flex items-center justify-between border-b border-zinc-100 bg-zinc-50/50 px-6 py-4">
             <div>
               <h2 className="text-xs font-semibold text-zinc-700">
-                Application Profile
+                Workspace Configuration & Branding
               </h2>
               <p className="mt-0.5 text-[11px] text-zinc-400">
                 {profileAsset
-                  ? "Your public application details and workspace roles."
-                  : "Complete your profile information to proceed."}
+                  ? "Global settings driving your frontend navigation, invoices, and gateway identity."
+                  : "Complete your workspace setup to unlock system modules."}
               </p>
             </div>
 
@@ -303,7 +355,7 @@ const Profile = () => {
                 className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm transition hover:bg-zinc-50"
               >
                 <Edit3 size={13} />
-                <span>Edit Profile</span>
+                <span>Edit Workspace</span>
               </button>
             )}
           </div>
@@ -313,8 +365,28 @@ const Profile = () => {
             <div className="divide-y divide-zinc-100">
               <ProfileRow
                 icon={<User size={14} />}
-                label="Full Name"
-                value={profileData.name}
+                label="Admin Full Name"
+                value={profileData.displayName}
+              />
+              <ProfileRow
+                icon={<Building2 size={14} />}
+                label="Organization / Brand"
+                value={profileData.organizationName}
+              />
+              <ProfileRow
+                icon={<ImageIcon size={14} />}
+                label="Workspace Logo"
+                value={
+                  profileData.logoUrl ? (
+                    <img
+                      src={profileData.logoUrl}
+                      alt="Brand Logo"
+                      className="h-8 w-auto rounded border border-zinc-200 object-contain"
+                    />
+                  ) : (
+                    "No custom logo uploaded"
+                  )
+                }
               />
               <ProfileRow
                 icon={<Phone size={14} />}
@@ -322,21 +394,36 @@ const Profile = () => {
                 value={profileData.phone}
               />
               <ProfileRow
-                icon={<Building2 size={14} />}
-                label="Account Type"
+                icon={<CreditCard size={14} />}
+                label="Primary Currency"
+                value={profileData.currency || "BDT"}
+              />
+              <ProfileRow
+                icon={<Globe size={14} />}
+                label="Website URL"
+                value={profileData.website}
+              />
+              <ProfileRow
+                icon={<BadgeCheck size={14} />}
+                label="Workspace Type"
                 value={
-                  profileData.businessType ? (
+                  profileData.accountType ? (
                     <span
                       className={`inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium capitalize ${
-                        ACCOUNT_TYPE_MAP[profileData.businessType]?.color ||
+                        ACCOUNT_TYPE_MAP[profileData.accountType]?.color ||
                         "bg-zinc-100 text-zinc-700 border-zinc-200"
                       }`}
                     >
-                      {ACCOUNT_TYPE_MAP[profileData.businessType]?.label ||
-                        profileData.businessType}
+                      {ACCOUNT_TYPE_MAP[profileData.accountType]?.label ||
+                        profileData.accountType}
                     </span>
                   ) : null
                 }
+              />
+              <ProfileRow
+                icon={<Layers size={14} />}
+                label="Tax / BIN Number"
+                value={profileData.taxId || "Not Configured"}
               />
             </div>
           )}
@@ -345,8 +432,7 @@ const Profile = () => {
           {!profileAsset && !showForm && (
             <div className="p-8 text-center">
               <p className="text-xs leading-relaxed text-zinc-500">
-                You haven't set up an application profile asset yet. Creating one
-                will grant you full access to features.
+                No workspace asset detected. Initialize your profile to set up your primary database tenant record.
               </p>
               <button
                 type="button"
@@ -354,7 +440,7 @@ const Profile = () => {
                 className="mt-4 inline-flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white shadow transition hover:bg-zinc-800"
               >
                 <Plus size={14} />
-                <span>Create Profile</span>
+                <span>Initialize Workspace Profile</span>
               </button>
             </div>
           )}
@@ -363,10 +449,9 @@ const Profile = () => {
           {showForm && (
             <div className="p-2 sm:p-4">
               <UniversalDataCollectionTemplate
-                title={profileAsset ? "Edit Application Profile" : "Create Application Profile"}
-                description="Update your identity and account credentials for this workspace."
-                type="user"
-                businessType={profileData.businessType || "individual"}
+                title={profileAsset ? "Edit Workspace Details" : "Initialize Workspace"}
+                description="Upload brand media, update business identity, and currency defaults."
+                type="user_profile"
                 fields={PROFILE_FIELDS}
                 initialData={formInitialData}
                 assetId={profileAsset?.id || profileAsset?._id || null}
@@ -391,7 +476,7 @@ const Profile = () => {
 const ProfileRow = ({ icon, label, value, mono = false }) => {
   return (
     <div className="flex flex-col gap-1.5 px-6 py-3.5 sm:flex-row sm:items-center">
-      <div className="flex w-44 shrink-0 items-center gap-2 text-xs font-medium text-zinc-500">
+      <div className="flex w-48 shrink-0 items-center gap-2 text-xs font-medium text-zinc-500">
         {icon && <span className="text-zinc-400">{icon}</span>}
         <span>{label}</span>
       </div>

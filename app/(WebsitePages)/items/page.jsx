@@ -15,7 +15,7 @@ const Items = () => {
         loading,
         error,
     } = useAssets({
-        type: "subscription",
+        type: "package",
     });
 
     const [addedItems, setAddedItems] =
