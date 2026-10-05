@@ -3,29 +3,24 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Activity,
-  BarChart3,
-  Bell,
-  BriefcaseBusiness,
-  ClipboardList,
-  FileText,
+  ChevronDown,
+  FileBarChart,
   LayoutDashboard,
   LogOut,
-  Package,
-  PlusCircle,
+  Map,
+  Network,
+  Router,
   Settings,
   User,
   Users,
   Wallet,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import useAuth from "@/Auth/hooks/useAuth";
 
 /* ============================================================
-   UNIVERSAL SIDEBAR NAVIGATION
-
-   These pages are shared across projects:
-   ISP / School / Shop / Other Business Systems
+   ISP ADMIN PORTAL NAVIGATION
 ============================================================ */
 
 const sidebarSections = [
@@ -37,25 +32,123 @@ const sidebarSections = [
         href: "/dashboard",
         icon: LayoutDashboard,
       },
+    ],
+  },
+
+  {
+    label: "Core ISP",
+    items: [
       {
-        label: "Create Package",
-        href: "/dashboard/createpackage",
-        icon: LayoutDashboard,
-      },
-      {
-        label: "Manage Subscription",
-        href: "/dashboard/managesubscription",
+        label: "Configuration",
         icon: Settings,
+        children: [
+          {
+            label: "Zones",
+            href: "/config/zones",
+          },
+          {
+            label: "Packages",
+            href: "/config/packages",
+          },
+          {
+            label: "Client Types",
+            href: "/config/client-types",
+          },
+          {
+            label: "Connection Types",
+            href: "/config/connection-types",
+          },
+          {
+            label: "Billing Status",
+            href: "/config/billing-status",
+          },
+        ],
       },
+
       {
-        label: "Check Out",
-        href: "/dashboard/checkoutpage",
-        icon: FileText,
+        label: "Clients",
+        icon: Users,
+        children: [
+          {
+            label: "Client List",
+            href: "/clients",
+          },
+          {
+            label: "Add Client",
+            href: "/clients/add",
+          },
+          {
+            label: "Signup Requests",
+            href: "/clients/signup-requests",
+          },
+          {
+            label: "Left Clients",
+            href: "/clients/left",
+          },
+        ],
       },
+
       {
-        label: "Purchase History",
-        href: "/dashboard/purchasesPage",
+        label: "Accounts",
         icon: Wallet,
+        children: [
+          {
+            label: "Billing",
+            href: "/billing",
+          },
+          {
+            label: "Collection",
+            href: "/billing/collection",
+          },
+          {
+            label: "Billing History",
+            href: "/billing/history",
+          },
+          {
+            label: "Expenses",
+            href: "/accounting/expenses",
+          },
+          {
+            label: "Profit & Loss",
+            href: "/accounting/profit-loss",
+          },
+          {
+            label: "Ledger",
+            href: "/accounting/ledger",
+          },
+        ],
+      },
+
+      {
+        label: "Reports",
+        href: "/reports",
+        icon: FileBarChart,
+      },
+    ],
+  },
+
+  {
+    label: "Network",
+    items: [
+      {
+        label: "Servers",
+        href: "/network/servers",
+        icon: Network,
+      },
+      {
+        label: "Routers",
+        href: "/network/routers",
+        icon: Router,
+      },
+      {
+        label: "Monitoring",
+        href: "/network/monitoring",
+        icon: Network,
+      },
+      {
+        label: "Network Map",
+        href: "/network/map",
+        icon: Map,
       },
     ],
   },
@@ -70,6 +163,48 @@ const Sidebar = () => {
   const router = useRouter();
 
   const { user, logout } = useAuth();
+
+  const [openMenus, setOpenMenus] = useState({});
+
+  /* ==========================================================
+     AUTO OPEN ACTIVE MENU
+  ========================================================== */
+
+  useEffect(() => {
+    const activeMenus = {};
+
+    sidebarSections.forEach((section) => {
+      section.items.forEach((item) => {
+        if (item.children) {
+          const hasActiveChild = item.children.some(
+            (child) =>
+              pathname === child.href ||
+              pathname.startsWith(`${child.href}/`)
+          );
+
+          if (hasActiveChild) {
+            activeMenus[item.label] = true;
+          }
+        }
+      });
+    });
+
+    setOpenMenus((current) => ({
+      ...current,
+      ...activeMenus,
+    }));
+  }, [pathname]);
+
+  /* ==========================================================
+     TOGGLE MENU
+  ========================================================== */
+
+  const toggleMenu = (label) => {
+    setOpenMenus((current) => ({
+      ...current,
+      [label]: !current[label],
+    }));
+  };
 
   /* ==========================================================
      LOGOUT
@@ -93,8 +228,7 @@ const Sidebar = () => {
     user?.email?.split("@")[0] ||
     "User";
 
-  const initial =
-    displayName.charAt(0).toUpperCase();
+  const initial = displayName.charAt(0).toUpperCase();
 
   /* ==========================================================
      RENDER
@@ -114,12 +248,18 @@ const Sidebar = () => {
           className="flex items-center gap-2.5"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-950 text-sm font-bold text-white">
-            U
+            I
           </div>
 
-          <span className="text-lg font-bold tracking-tight text-zinc-950">
-            Universal
-          </span>
+          <div>
+            <p className="text-lg font-bold leading-none tracking-tight text-zinc-950">
+              ISP Admin
+            </p>
+
+            <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+              Management Portal
+            </p>
+          </div>
         </Link>
 
       </div>
@@ -144,6 +284,96 @@ const Sidebar = () => {
 
               {section.items.map((item) => {
                 const Icon = item.icon;
+
+                /* ==============================================
+                   MENU WITH SUBMENU
+                ============================================== */
+
+                if (item.children) {
+                  const isOpen =
+                    openMenus[item.label] || false;
+
+                  const hasActiveChild =
+                    item.children.some(
+                      (child) =>
+                        pathname === child.href ||
+                        pathname.startsWith(
+                          `${child.href}/`
+                        )
+                    );
+
+                  return (
+                    <div key={item.label}>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          toggleMenu(item.label)
+                        }
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                          hasActiveChild
+                            ? "bg-zinc-100 text-zinc-950"
+                            : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+                        }`}
+                      >
+
+                        <Icon size={17} />
+
+                        <span className="flex-1 text-left">
+                          {item.label}
+                        </span>
+
+                        <ChevronDown
+                          size={15}
+                          className={`transition-transform ${
+                            isOpen
+                              ? "rotate-180"
+                              : ""
+                          }`}
+                        />
+
+                      </button>
+
+                      {/* Submenu */}
+
+                      {isOpen && (
+                        <div className="ml-4 mt-1 space-y-1 border-l border-zinc-200 pl-3">
+
+                          {item.children.map(
+                            (child) => {
+                              const isActive =
+                                pathname ===
+                                  child.href ||
+                                pathname.startsWith(
+                                  `${child.href}/`
+                                );
+
+                              return (
+                                <Link
+                                  key={child.href}
+                                  href={child.href}
+                                  className={`block rounded-md px-3 py-2 text-sm transition ${
+                                    isActive
+                                      ? "bg-zinc-950 font-medium text-white"
+                                      : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
+                                  }`}
+                                >
+                                  {child.label}
+                                </Link>
+                              );
+                            }
+                          )}
+
+                        </div>
+                      )}
+
+                    </div>
+                  );
+                }
+
+                /* ==============================================
+                   NORMAL LINK
+                ============================================== */
 
                 const isActive =
                   pathname === item.href ||
@@ -188,8 +418,6 @@ const Sidebar = () => {
           className="flex items-center gap-3 rounded-lg p-2.5 transition hover:bg-zinc-100"
         >
 
-          {/* Avatar */}
-
           {user?.photoURL ? (
             <img
               src={user.photoURL}
@@ -201,8 +429,6 @@ const Sidebar = () => {
               {initial}
             </div>
           )}
-
-          {/* User information */}
 
           <div className="min-w-0 flex-1">
 
