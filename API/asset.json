@@ -1,328 +1,746 @@
 [
   {
     "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_school_001",
-    "type": "user",
-    "businessType": "school",
-    "access": [
-      {
-        "email": "user_school_admin_001",
-        "role": "owner"
-      },
-      {
-        "email": "user_school_teacher_001",
-        "role": "editor"
-      },
-      {
-        "email": "user_school_student_001",
-        "role": "viewer"
-      }
-    ],
-    "data": {
-    },
-    "createdAt": "2026-08-11T10:00:00Z",
-    "updatedAt": "2026-08-11T10:00:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_school_002",
-    "type": "user",
-    "businessType": "school",
-    "access": [
-      {
-        "email": "tvetucep@gmail.com",
-        "role": "owner"
-      },
-      {
-        "email": "teacher1@example.com",
-        "role": "editor"
-      }
-    ],
-    "data": {
-      "name": "Nusrat Jahan",
-      "email": "nusrat@example.com",
-      "phone": "01910000000",
-      "dateOfBirth": "2011-09-22",
-      "gender": "female",
-      "class": "9",
-      "section": "B",
-      "roll": 7,
-      "academicYear": "2026",
-      "guardian": {
-        "name": "Mahmud Jahan",
-        "phone": "01610000000",
-        "relationship": "father"
-      },
-      "address": {
-        "street": "45 College Road",
-        "city": "Mymensingh",
-        "district": "Mymensingh"
-      },
-      "status": "active"
-    },
-    "createdAt": "2026-08-12T08:30:00Z",
-    "updatedAt": "2026-08-12T08:30:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_tvet_001",
-    "type": "user",
-    "businessType": "tvet",
-    "access": [
-      {
-        "email": "tvetucep@gmail.com",
-        "role": "owner"
-      },
-      {
-        "email": "trainer1@trainingcenter.com",
-        "role": "editor"
-      },
-      {
-        "email": "student1@example.com",
-        "role": "viewer"
-      }
-    ],
-    "data": {
-      "name": "Hasan Ali",
-      "email": "hasan@example.com",
-      "phone": "01711111111",
-      "dateOfBirth": "2001-03-18",
-      "gender": "male",
-      "trade": "Computer Operation",
-      "course": "Computer Operation",
-      "level": "BNQF Level 3",
-      "batch": "CO-2026-01",
-      "studentId": "CO260001",
-      "trainingCenter": "MUSTI Mymensingh",
-      "enrollmentDate": "2026-01-15",
-      "completionDate": "2026-07-15",
-      "attendance": 91,
-      "assessmentStatus": "completed",
-      "status": "active"
-    },
-    "createdAt": "2026-08-10T09:00:00Z",
-    "updatedAt": "2026-08-10T09:00:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_tvet_002",
-    "type": "user",
-    "businessType": "tvet",
-    "access": [
-      {
-        "email": "tvetucep@gmail.com",
-        "role": "owner"
-      },
-      {
-        "email": "trainer2@trainingcenter.com",
-        "role": "editor"
-      }
-    ],
-    "data": {
-      "name": "Sadia Akter",
-      "email": "sadia@example.com",
-      "phone": "01822222222",
-      "dateOfBirth": "2003-07-11",
-      "gender": "female",
-      "trade": "Graphic Design",
-      "course": "Graphic Design",
-      "level": "NSDA Level 3",
-      "batch": "GD-2026-02",
-      "studentId": "GD260014",
-      "trainingCenter": "UCEP Bangladesh",
-      "enrollmentDate": "2026-02-01",
-      "attendance": 87,
-      "assessmentStatus": "in_progress",
-      "status": "active"
-    },
-    "createdAt": "2026-08-09T11:00:00Z",
-    "updatedAt": "2026-08-09T11:00:00Z"
-  },
-  {
-    "ownerEmail": "admin@fastnet.com",
     "ownerId": "account_isp_001",
     "type": "user",
     "businessType": "isp",
+    "category": "consumers",
     "access": [
       {
-        "email": "admin@fastnet.com",
-        "role": "owner"
-      },
-      {
-        "email": "support@fastnet.com",
-        "role": "editor"
-      },
-      {
-        "email": "customer1@example.com",
-        "role": "viewer"
+        "email": "tvetucep@gmail.com",
+        "role": "admin"
       }
     ],
     "data": {
-      "name": "Abdul Karim",
-      "email": "abdul@example.com",
-      "phone": "01733333333",
-      "customerId": "CUS-10001",
-      "connectionType": "fiber",
-      "package": "FastNet 50 Mbps",
-      "bandwidth": "50 Mbps",
-      "monthlyBill": 800,
-      "billingCycle": "monthly",
-      "installationDate": "2025-06-15",
-      "router": {
-        "brand": "TP-Link",
-        "model": "Archer C6",
-        "macAddress": "AA:BB:CC:DD:EE:01"
+      "overviewDashboard": {
+        "activeSubscribersCount": 1250,
+        "monthlyRevenue": 1250000,
+        "pendingSignupsCount": 12
       },
-      "connectionAddress": {
-        "street": "23 Mirpur Road",
-        "area": "Mirpur",
-        "city": "Dhaka",
-        "district": "Dhaka"
+      "subscriptions": [
+        {
+          "subscriptionId": "sub_01",
+          "clientId": "client_001",
+          "packageId": "pkg_01",
+          "status": "active",
+          "renewalDate": "2026-11-01"
+        }
+      ],
+      "checkoutHistory": [
+        {
+          "checkoutId": "chk_01",
+          "clientId": "client_001",
+          "amount": 1000,
+          "gateway": "bKash",
+          "timestamp": "2026-10-01T10:15:00Z"
+        }
+      ],
+      "purchaseHistory": [
+        {
+          "purchaseId": "pur_01",
+          "item": "10 Mbps Unlimited Package",
+          "amount": 1000,
+          "date": "2026-10-01"
+        }
+      ],
+      "clients": [
+        {
+          "id": "client_001",
+          "name": "John Doe",
+          "email": "tvetucep@gmail.com@example.com",
+          "phone": "+8801700000000",
+          "status": "active",
+          "packageId": "pkg_01",
+          "zoneId": "zone_north",
+          "connectionType": "PPPoE",
+          "ipOrMac": "192.168.10.55",
+          "billingCycleDate": 1,
+          "createdAt": "2026-08-11T10:00:00Z"
+        }
+      ],
+      "signupRequests": [
+        {
+          "requestId": "req_001",
+          "name": "Sarah Connor",
+          "phone": "+8801900000000",
+          "packageRequested": "pkg_01",
+          "requestedAt": "2026-10-05T14:30:00Z"
+        }
+      ],
+      "leftClients": [
+        {
+          "clientId": "client_999",
+          "name": "Bob Marley",
+          "disconnectedAt": "2026-09-15T09:00:00Z",
+          "reason": "Relocated"
+        }
+      ],
+      "packages": [
+        {
+          "id": "pkg_01",
+          "name": "10 Mbps Unlimited",
+          "price": 1000,
+          "speed": "10 Mbps"
+        }
+      ],
+      "billingList": [
+        {
+          "invoiceId": "inv_001",
+          "clientId": "client_001",
+          "amount": 1000,
+          "status": "unpaid",
+          "dueDate": "2026-10-31"
+        }
+      ],
+      "collections": [
+        {
+          "collectionId": "col_001",
+          "invoiceId": "inv_000",
+          "clientId": "client_001",
+          "amountPaid": 1000,
+          "method": "bKash",
+          "collectedAt": "2026-09-05T11:20:00Z"
+        }
+      ],
+      "billingHistory": [
+        {
+          "historyId": "hist_001",
+          "description": "September 2026 Billing Cycle Generated",
+          "timestamp": "2026-09-01T00:00:00Z"
+        }
+      ],
+      "expenses": [
+        {
+          "expenseId": "exp_01",
+          "title": "Office Rent",
+          "amount": 25000,
+          "date": "2026-10-02"
+        }
+      ],
+      "profitAndLoss": {
+        "totalRevenue": 1250000,
+        "totalExpenses": 800000,
+        "netProfit": 450000
       },
-      "paymentStatus": "paid",
-      "status": "active"
+      "ledger": [
+        {
+          "ledgerId": "ldg_01",
+          "account": "Cash in Hand",
+          "debit": 1000,
+          "credit": 0
+        }
+      ],
+      "hotspot": {
+        "dashboardStats": {
+          "activeHotspotSessions": 45
+        },
+        "users": [
+          {
+            "userId": "hs_usr_01",
+            "username": "guest_user1",
+            "status": "active"
+          }
+        ],
+        "profiles": [
+          {
+            "profileId": "hs_prof_01",
+            "name": "1 Hour Free",
+            "limitUptime": "1h"
+          }
+        ],
+        "servers": [
+          {
+            "serverId": "hs_srv_01",
+            "name": "Cafe Hotspot Server"
+          }
+        ],
+        "activeSessions": [
+          {
+            "sessionId": "sess_01",
+            "username": "guest_user1",
+            "ip": "172.16.0.5"
+          }
+        ],
+        "vouchers": [
+          {
+            "code": "VOUCH9988",
+            "batchId": "b_01",
+            "isUsed": false
+          }
+        ],
+        "voucherTemplates": [
+          {
+            "templateId": "tpl_01",
+            "layoutName": "Standard Thermal Print"
+          }
+        ],
+        "reports": [
+          {
+            "reportId": "rep_hs_01",
+            "totalVouchersSold": 150
+          }
+        ]
+      }
     },
-    "createdAt": "2026-08-08T08:00:00Z",
-    "updatedAt": "2026-08-08T08:00:00Z"
+    "updatedAt": "2026-10-06T15:27:00Z"
   },
   {
-    "ownerEmail": "admin@fastnet.com",
-    "ownerId": "account_isp_002",
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_isp_001",
     "type": "user",
     "businessType": "isp",
+    "category": "workers",
     "access": [
       {
-        "email": "admin@fastnet.com",
-        "role": "owner"
-      },
-      {
-        "email": "support@fastnet.com",
-        "role": "editor"
+        "email": "tvetucep@gmail.com",
+        "role": "admin"
       }
     ],
     "data": {
-      "name": "Mizanur Rahman",
-      "email": "mizan@example.com",
-      "phone": "01944444444",
-      "customerId": "CUS-10002",
-      "connectionType": "fiber",
-      "package": "FastNet 100 Mbps",
-      "bandwidth": "100 Mbps",
-      "monthlyBill": 1200,
-      "billingCycle": "monthly",
-      "installationDate": "2026-01-20",
-      "router": {
-        "brand": "Huawei",
-        "model": "HG8145V5",
-        "macAddress": "AA:BB:CC:DD:EE:02"
+      "itsm": {
+        "dashboard": {
+          "openTickets": 5,
+          "resolvedToday": 14
+        },
+        "tickets": [
+          {
+            "ticketId": "tkt_001",
+            "clientId": "client_001",
+            "assignedTo": "emp_01",
+            "issue": "No internet connection",
+            "status": "open",
+            "priority": "high"
+          }
+        ],
+        "technicianPerformance": [
+          {
+            "empId": "emp_01",
+            "ticketsResolved": 42,
+            "rating": 4.8
+          }
+        ],
+        "knowledgeBase": [
+          {
+            "articleId": "kb_01",
+            "title": "MikroTik PPPoE Troubleshooting",
+            "category": "Network"
+          }
+        ]
       },
-      "connectionAddress": {
-        "street": "8 Station Road",
-        "area": "Uttara",
-        "city": "Dhaka",
-        "district": "Dhaka"
+      "hrPayroll": {
+        "departments": [
+          {
+            "id": "dept_01",
+            "name": "Network Operations"
+          },
+          {
+            "id": "dept_02",
+            "name": "Billing & Support"
+          }
+        ],
+        "employees": [
+          {
+            "id": "emp_01",
+            "name": "Alex Smith",
+            "department": "Network Operations",
+            "designation": "Senior Technician",
+            "phone": "+8801800000000",
+            "status": "active"
+          }
+        ],
+        "attendance": [
+          {
+            "attendanceId": "att_01",
+            "empId": "emp_01",
+            "date": "2026-10-06",
+            "status": "Present"
+          }
+        ],
+        "payroll": [
+          {
+            "payrollId": "pay_01",
+            "empId": "emp_01",
+            "baseSalary": 25000,
+            "status": "Disbursed"
+          }
+        ],
+        "biometricDevices": [
+          {
+            "deviceId": "bio_01",
+            "ipAddress": "192.168.1.200",
+            "location": "Main Office"
+          }
+        ]
       },
-      "paymentStatus": "due",
-      "status": "active"
+      "purchase": {
+        "dashboard": {
+          "lowStockItemsCount": 2
+        },
+        "products": [
+          {
+            "productId": "prod_01",
+            "name": "Cat6 Cable Roll",
+            "stock": 15
+          }
+        ],
+        "vendors": [
+          {
+            "vendorId": "vend_01",
+            "name": "Tech Supplies Ltd",
+            "contact": "+8801600000000"
+          }
+        ],
+        "purchaseOrders": [
+          {
+            "poId": "po_01",
+            "vendorId": "vend_01",
+            "status": "Delivered"
+          }
+        ],
+        "inventory": [
+          {
+            "inventoryId": "inv_01",
+            "item": "Router Patch Cord",
+            "quantity": 120
+          }
+        ],
+        "requisitions": [
+          {
+            "reqId": "req_01",
+            "requestedBy": "emp_01",
+            "item": "Crimping Tool",
+            "status": "Approved"
+          }
+        ]
+      },
+      "crm": {
+        "salesLeads": [
+          {
+            "leadId": "lead_01",
+            "name": "Enterprise Corp",
+            "status": "Follow-up Required"
+          }
+        ],
+        "followUps": [
+          {
+            "followUpId": "f_01",
+            "leadId": "lead_01",
+            "scheduledDate": "2026-10-08"
+          }
+        ]
+      }
     },
-    "createdAt": "2026-08-07T12:00:00Z",
-    "updatedAt": "2026-08-07T12:00:00Z"
+    "updatedAt": "2026-10-06T15:27:00Z"
   },
   {
-    "ownerEmail": "owner@rahmanshop.com",
-    "ownerId": "account_shop_001",
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_isp_001",
     "type": "user",
-    "businessType": "shop",
+    "businessType": "isp",
+    "category": "center",
     "access": [
       {
-        "email": "owner@rahmanshop.com",
-        "role": "owner"
-      },
-      {
-        "email": "manager@rahmanshop.com",
-        "role": "editor"
-      },
-      {
-        "email": "staff@rahmanshop.com",
-        "role": "viewer"
+        "email": "tvetucep@gmail.com",
+        "role": "admin"
       }
     ],
     "data": {
-      "name": "Rahman Electronics",
-      "email": "owner@rahmanshop.com",
-      "phone": "01755555555",
-      "shopName": "Rahman Electronics",
-      "category": "Electronics",
-      "address": {
-        "street": "22 New Market Road",
-        "area": "New Market",
-        "city": "Dhaka",
-        "district": "Dhaka"
+      "configuration": {
+        "zones": [
+          {
+            "id": "zone_north",
+            "name": "North Zone",
+            "subZones": [
+              "Uttara",
+              "Mirpur"
+            ]
+          }
+        ],
+        "locationsGeo": {
+          "districts": [
+            "Dhaka"
+          ],
+          "upazilas": [
+            "Uttara",
+            "Mirpur"
+          ],
+          "unions": [
+            "Union A"
+          ]
+        },
+        "packagesConfig": [
+          {
+            "packageConfigId": "pc_01",
+            "profileType": "PPPoE"
+          }
+        ],
+        "clientTypesAndProtocols": [
+          {
+            "protocolId": "proto_01",
+            "name": "PPPoE / Static IP"
+          }
+        ],
+        "billingStatusTypes": [
+          {
+            "statusId": "bs_01",
+            "state": "Active / Suspended / Grace"
+          }
+        ],
+        "systemPreferences": {
+          "currency": "BDT",
+          "timezone": "Asia/Dhaka"
+        }
       },
-      "products": 245,
-      "employees": 6,
-      "monthlySales": 485000,
-      "currency": "BDT",
-      "openingHours": {
-        "open": "09:00",
-        "close": "21:00"
+      "serverDistribution": {
+        "dashboard": {
+          "onlineServersCount": 3,
+          "totalClientsRouted": 1250
+        },
+        "servers": [
+          {
+            "id": "srv_01",
+            "name": "Main MikroTik Gateway",
+            "ip": "10.0.0.1",
+            "apiPort": 8728,
+            "status": "online"
+          }
+        ],
+        "importFromMikrotik": [
+          {
+            "importId": "imp_01",
+            "lastSync": "2026-10-06T12:00:00Z",
+            "status": "Success"
+          }
+        ],
+        "pppoePopupSettings": {
+          "enabled": true,
+          "expiryWarningDays": 3
+        },
+        "oltManagement": [
+          {
+            "oltId": "olt_01",
+            "name": "Huawei OLT 5608T",
+            "ip": "10.0.0.5",
+            "status": "Active"
+          }
+        ]
       },
-      "paymentMethods": [
-        "cash",
-        "bkash",
-        "nagad",
-        "card"
-      ],
-      "status": "active"
-    },
-    "createdAt": "2026-08-06T09:30:00Z",
-    "updatedAt": "2026-08-06T09:30:00Z"
-  },
-  {
-    "ownerEmail": "owner@fashionhouse.com",
-    "ownerId": "account_shop_002",
-    "type": "user",
-    "businessType": "shop",
-    "access": [
-      {
-        "email": "owner@fashionhouse.com",
-        "role": "owner"
+      "network": {
+        "networkMap": {
+          "nodes": [
+            {
+              "nodeId": "n_01",
+              "label": "Core Router"
+            }
+          ],
+          "links": [
+            {
+              "source": "n_01",
+              "target": "srv_01"
+            }
+          ]
+        },
+        "fiberDiagram": [
+          {
+            "diagramId": "fib_01",
+            "coreName": "Core A - North Line",
+            "status": "Intact"
+          }
+        ]
       },
-      {
-        "email": "manager@fashionhouse.com",
-        "role": "editor"
+      "nms": {
+        "dashboard": {
+          "pingLatencyAvg": "4ms",
+          "packetLoss": "0%"
+        },
+        "institutions": [
+          {
+            "instId": "inst_01",
+            "name": "Govt College Node"
+          }
+        ],
+        "routers": [
+          {
+            "routerId": "r_01",
+            "model": "CCR1036",
+            "status": "Healthy"
+          }
+        ],
+        "vendors": [
+          {
+            "vendorId": "v_01",
+            "name": "MikroTik Official"
+          }
+        ],
+        "monitoring": [
+          {
+            "logId": "log_01",
+            "event": "High CPU Usage Alert",
+            "timestamp": "2026-10-06T10:00:00Z"
+          }
+        ],
+        "mapView": [
+          {
+            "markerId": "m_01",
+            "lat": 23.8103,
+            "lng": 90.4125,
+            "label": "Tower 1"
+          }
+        ],
+        "diagnostics": [
+          {
+            "diagId": "dg_01",
+            "targetIp": "8.8.8.8",
+            "status": "Reachable"
+          }
+        ],
+        "locationsDivisions": [
+          {
+            "divisionId": "div_01",
+            "name": "Dhaka Division"
+          }
+        ]
+      },
+      "bandwidth": {
+        "dashboard": {
+          "totalAllocatedMbps": 500,
+          "currentUsageMbps": 320
+        },
+        "providers": [
+          {
+            "providerId": "bp_01",
+            "name": "Fiber@Home",
+            "allocatedMbps": 500
+          }
+        ],
+        "purchases": [
+          {
+            "purchaseId": "pur_01",
+            "bandwidthMbps": 500,
+            "cost": 40000
+          }
+        ],
+        "sales": [
+          {
+            "saleId": "sal_01",
+            "allocatedMbps": 10
+          }
+        ],
+        "monitoring": [
+          {
+            "timestamp": "2026-10-06T15:00:00Z",
+            "usageGb": 320.5
+          }
+        ]
+      },
+      "macReseller": {
+        "macResellerList": [
+          {
+            "resellerId": "mac_res_01",
+            "name": "Metro Net Reseller",
+            "balance": 5000
+          }
+        ],
+        "packages": [
+          {
+            "resellerPkgId": "rp_01",
+            "name": "Reseller 5Mbps",
+            "price": 400
+          }
+        ],
+        "macResellerFunding": [
+          {
+            "fundingId": "fund_01",
+            "amountAdded": 5000,
+            "date": "2026-10-04"
+          }
+        ]
+      },
+      "hardwareAndOnus": {
+        "onuSerialMapping": [
+          {
+            "onuId": "onu_01",
+            "serialNumber": "HWTC12345678",
+            "assignedClientId": "client_001"
+          }
+        ],
+        "assignedRouters": [
+          {
+            "assignedRouterId": "ar_01",
+            "model": "TP-Link Archer C6",
+            "clientId": "client_001"
+          }
+        ]
+      },
+      "communications": {
+        "sms": {
+          "dashboard": {
+            "smsSentToday": 450,
+            "remainingCredits": 5500
+          },
+          "sendSms": [
+            {
+              "logId": "sms_log_01",
+              "recipient": "+8801700000000",
+              "status": "Sent"
+            }
+          ],
+          "messages": [
+            {
+              "msgId": "m_01",
+              "text": "Your bill is ready."
+            }
+          ],
+          "gateways": [
+            {
+              "gatewayId": "sg_01",
+              "name": "Twilio",
+              "status": "Active"
+            }
+          ],
+          "devices": [
+            {
+              "devId": "sdev_01",
+              "name": "Android GSM Gateway"
+            }
+          ],
+          "templates": [
+            {
+              "templateId": "st_01",
+              "content": "Dear customer, your payment is due."
+            }
+          ],
+          "reports": [
+            {
+              "repId": "sr_01",
+              "deliveryRate": "98.5%"
+            }
+          ]
+        },
+        "whatsapp": {
+          "dashboard": {
+            "connectedStatus": "Online"
+          },
+          "devices": [
+            {
+              "waDevId": "wad_01",
+              "phone": "+8801700000000",
+              "status": "Connected"
+            }
+          ],
+          "sendMessage": [
+            {
+              "waSendId": "was_01",
+              "recipient": "+8801800000000",
+              "status": "Delivered"
+            }
+          ],
+          "templates": [
+            {
+              "waTplId": "wat_01",
+              "name": "payment_reminder"
+            }
+          ],
+          "messages": [
+            {
+              "waMsgId": "wam_01",
+              "direction": "outbound",
+              "text": "Invoice attached."
+            }
+          ],
+          "chatbot": [
+            {
+              "botId": "bot_01",
+              "trigger": "hi",
+              "response": "Welcome to our ISP support."
+            }
+          ],
+          "schedules": [
+            {
+              "schId": "sch_01",
+              "cron": "0 9 * * *",
+              "task": "Send Daily Reminders"
+            }
+          ],
+          "contacts": [
+            {
+              "contactId": "wac_01",
+              "name": "John Doe",
+              "phone": "+8801700000000"
+            }
+          ]
+        }
+      },
+      "systemAndReports": {
+        "reportsSummary": {
+          "generatedReportsCount": 24
+        },
+        "upac": [
+          {
+            "upacId": "upac_01",
+            "status": "Compliant",
+            "lastAudited": "2026-09-30"
+          }
+        ],
+        "settings": {
+          "dashboard": {
+            "systemStatus": "Optimal"
+          },
+          "appUsers": [
+            {
+              "appUserId": "au_01",
+              "email": "tvetucep@gmail.com@isp.com",
+              "role": "admin"
+            }
+          ],
+          "invoiceSetup": {
+            "prefix": "INV-",
+            "terms": "Due within 7 days"
+          },
+          "periodsSetup": [
+            {
+              "periodId": "per_01",
+              "fiscalYear": "2026",
+              "activeMonth": "October"
+            }
+          ],
+          "paymentGateways": [
+            {
+              "gatewayName": "bKash",
+              "enabled": true,
+              "merchantNumber": "01700000000"
+            }
+          ],
+          "customerPortalSettings": {
+            "customerPortalActive": true,
+            "allowSelfRegistration": true
+          },
+          "apiWebhooks": [
+            {
+              "webhookId": "wh_01",
+              "endpoint": "https://api.isp.com/hook",
+              "active": true
+            }
+          ],
+          "auditLogs": [
+            {
+              "logId": "aud_01",
+              "action": "UPDATE_PREFERENCES",
+              "performedBy": "tvetucep@gmail.com",
+              "timestamp": "2026-10-06T12:00:00Z"
+            }
+          ]
+        },
+        "releaseNotes": [
+          {
+            "version": "v2.5.0",
+            "releaseDate": "2026-10-01",
+            "notes": "Added advanced OLT tracking and WhatsApp bot."
+          }
+        ]
       }
-    ],
-    "data": {
-      "name": "Fashion House",
-      "email": "owner@fashionhouse.com",
-      "phone": "01866666666",
-      "shopName": "Fashion House",
-      "category": "Clothing",
-      "address": {
-        "street": "15 Station Road",
-        "area": "Sadar",
-        "city": "Mymensingh",
-        "district": "Mymensingh"
-      },
-      "products": 520,
-      "employees": 9,
-      "monthlySales": 720000,
-      "currency": "BDT",
-      "openingHours": {
-        "open": "10:00",
-        "close": "22:00"
-      },
-      "paymentMethods": [
-        "cash",
-        "bkash",
-        "nagad",
-        "card"
-      ],
-      "status": "active"
     },
-    "createdAt": "2026-08-05T14:00:00Z",
-    "updatedAt": "2026-08-05T14:00:00Z"
+    "updatedAt": "2026-10-06T15:27:00Z"
   },
   {
     "ownerEmail": "tvetucep@gmail.com",
@@ -331,88 +749,8 @@
     "businessType": "school",
     "access": [
       {
-        "email": "anyone",
-        "role": "anyone"
-      }
-    ],
-    "data": {
-      "name": "Basic Package",
-      "description": "Essential features for getting started.",
-      "amount": 1000,
-      "currency": "BDT"
-    },
-    "createdAt": "2026-08-11T10:00:00Z",
-    "updatedAt": "2026-08-11T10:00:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_school_001",
-    "type": "package",
-    "businessType": "school",
-    "access": [
-      {
-        "email": "anyone",
-        "role": "anyone"
-      }
-    ],
-    "data": {
-      "name": "Standard Package",
-      "description": "More features and greater access for growing organizations.",
-      "amount": 2500,
-      "currency": "BDT"
-    },
-    "createdAt": "2026-08-11T10:05:00Z",
-    "updatedAt": "2026-08-11T10:05:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_school_001",
-    "type": "package",
-    "businessType": "school",
-    "access": [
-      {
-        "email": "anyone",
-        "role": "anyone"
-      }
-    ],
-    "data": {
-      "name": "Professional Package",
-      "description": "Advanced features for professional users and institutions.",
-      "amount": 5000,
-      "currency": "BDT"
-    },
-    "createdAt": "2026-08-11T10:10:00Z",
-    "updatedAt": "2026-08-11T10:10:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_school_001",
-    "type": "package",
-    "businessType": "school",
-    "access": [
-      {
-        "email": "anyone",
-        "role": "anyone"
-      }
-    ],
-    "data": {
-      "name": "Business Package",
-      "description": "Comprehensive tools and access for larger organizations.",
-      "amount": 10000,
-      "currency": "BDT"
-    },
-    "createdAt": "2026-08-11T10:15:00Z",
-    "updatedAt": "2026-08-11T10:15:00Z"
-  },
-  {
-    "ownerEmail": "tvetucep@gmail.com",
-    "ownerId": "account_school_001",
-    "type": "package",
-    "businessType": "school",
-    "access": [
-      {
-        "email": "anyone",
-        "role": "anyone"
+        "email": "tvetucep@gmail.com",
+        "role": "admin"
       }
     ],
     "data": {
@@ -423,5 +761,104 @@
     },
     "createdAt": "2026-08-11T10:20:00Z",
     "updatedAt": "2026-08-11T10:20:00Z"
+  },
+  {
+    "ownerEmail": "tvetucep@gmail.com",
+    "ownerId": "account_isp_001",
+    "type": "consumers",
+    "businessType": "isp",
+    "access": [
+      {
+        "email": "tvetucep@gmail.com",
+        "role": "admin"
+      }
+    ],
+    "data": {
+      "client": {
+        "clientId": "client_001",
+        "personalInfo": {
+          "fullName": "John Doe",
+          "email": "john.doe@example.com",
+          "phone": "+8801700000000",
+          "nationalId": "19985412365478"
+        },
+        "installationAddress": {
+          "street": "House 12, Road 5, Block C",
+          "area": "Uttara",
+          "district": "Dhaka",
+          "geoCoordinates": {
+            "lat": 23.8732,
+            "lng": 90.4012
+          }
+        },
+        "subscription": {
+          "packageId": "pkg_01",
+          "connectionType": "PPPoE",
+          "username": "johndoe_pppoe",
+          "ipAddress": "192.168.10.55",
+          "macAddress": "E8:48:B8:12:34:56",
+          "status": "active",
+          "billingCycleDate": 1
+        },
+        "networkAssigned": {
+          "zoneId": "zone_north",
+          "serverRouterId": "srv_01",
+          "oltPort": "0/1/4:2"
+        },
+        "createdAt": "2026-08-11T10:00:00Z"
+      },
+      "package": {
+        "packageId": "pkg_01",
+        "packageName": "10 Mbps Unlimited",
+        "speedMbps": 10,
+        "priceBdt": 1000,
+        "validityDays": 30
+      },
+      "billingInvoices": [
+        {
+          "invoiceId": "inv_001",
+          "billingMonth": "October 2026",
+          "amountDue": 1000,
+          "status": "unpaid",
+          "dueDate": "2026-10-10",
+          "generatedAt": "2026-10-01T00:00:00Z"
+        }
+      ],
+      "collections": [
+        {
+          "collectionId": "col_001",
+          "invoiceId": "inv_000",
+          "amountPaid": 1000,
+          "paymentMethod": "bKash",
+          "transactionId": "BKS987654321",
+          "collectedBy": "system_gateway",
+          "collectedAt": "2026-09-05T11:20:00Z"
+        }
+      ],
+      "signupRequest": {
+        "requestId": "req_001",
+        "applicantName": "John Doe",
+        "phone": "+8801700000000",
+        "address": "House 12, Road 5, Block C, Uttara",
+        "packageRequested": "pkg_01",
+        "status": "approved",
+        "requestedAt": "2026-08-10T14:30:00Z"
+      },
+      "hotspotProfile": {
+        "userId": "hs_usr_01",
+        "username": "johndoe_hotspot",
+        "phone": "+8801700000000",
+        "profileId": "hs_prof_01",
+        "status": "active",
+        "activeSession": {
+          "sessionId": "sess_01",
+          "ipAddress": "172.16.0.5",
+          "macAddress": "E8:48:B8:12:34:56",
+          "uptimeSeconds": 1840,
+          "bytesDownloaded": 104857600
+        }
+      }
+    },
+    "updatedAt": "2026-10-06T16:18:00Z"
   }
 ]

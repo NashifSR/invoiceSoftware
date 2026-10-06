@@ -16,6 +16,9 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
     type,
   });
 
+  console.group("checking asset manager consumer",type , assets)
+  console.groupEnd()
+
   const [search, setSearch] = useState("");
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [deletingId, setDeletingId] = useState(null);

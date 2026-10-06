@@ -30,6 +30,9 @@ const AssetForm = ({
 }) => {
   const { createAsset, updateAsset, loading, error } = useAssets();
 
+  console.group("inside asset form", fields)
+  console.groupEnd()
+
   const [formData, setFormData] = useState(() =>
     getInitialValues(fields, initialValues)
   );
