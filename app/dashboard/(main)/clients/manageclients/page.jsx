@@ -145,7 +145,7 @@ const ClientsPage = () => {
       {/* 2. Main Client List Container */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <AssetManager
-          type="consumers"
+          type="client"
           title="Active Subscribers"
         />
       </div>

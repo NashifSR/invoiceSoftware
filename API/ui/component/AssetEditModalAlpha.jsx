@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { X, Trash2, Save, Check, Loader2, AlertCircle, User, MapPin, Wifi, Shield } from "lucide-react";
+import { X, Trash2, Save, Check, Loader2, AlertCircle, User, MapPin, Wifi } from "lucide-react";
 
 const AssetEditModalAlpha = ({
   selectedAsset,
   onClose,
-  editableData, // Can still accept the raw string from manager if needed, but we'll manage form state internally
+  editableData,
   setEditableData,
   onUpdate,
   onDelete,
@@ -33,10 +33,15 @@ const AssetEditModalAlpha = ({
     status: "active",
   });
 
-  // When selectedAsset changes, populate the flat form state from the asset's JSON data
+  // When selectedAsset changes, safely parse and populate form fields from pre-existing data
   useEffect(() => {
-    if (selectedAsset?.data) {
-      const d = selectedAsset.data;
+    if (!selectedAsset) return;
+
+    try {
+      const d = typeof selectedAsset.data === "string" 
+        ? JSON.parse(selectedAsset.data) 
+        : (selectedAsset.data || {});
+
       const personal = d.client?.personalInfo || {};
       const address = d.client?.installationAddress || {};
       const sub = d.client?.subscription || {};
@@ -56,6 +61,8 @@ const AssetEditModalAlpha = ({
         macAddress: sub.macAddress || "",
         status: sub.status || "active",
       });
+    } catch (err) {
+      console.error("Failed to parse pre-existing asset data:", err);
     }
   }, [selectedAsset]);
 
@@ -63,8 +70,10 @@ const AssetEditModalAlpha = ({
   useEffect(() => {
     if (!selectedAsset) return;
 
-    // Reconstruct the deep schema structure expected by your backend API
-    const existingData = selectedAsset.data || {};
+    const existingData = typeof selectedAsset.data === "string" 
+      ? JSON.parse(selectedAsset.data || "{}") 
+      : (selectedAsset.data || {});
+
     const updatedPayload = {
       ...existingData,
       client: {

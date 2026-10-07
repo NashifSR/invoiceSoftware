@@ -4,10 +4,8 @@ import { useMemo, useState, useEffect, useCallback } from "react";
 import { Search, Loader2, AlertCircle } from "lucide-react";
 
 import useAssets from "@/API/useAssets";
-import AssetTablePrime from "./component/AssetTablePrime";
-import AssetEditModal from "./component/AssetEditModal";
 import AssetTableAlpha from "./component/AssetTableAlpha";
-import AssetEditModalAlpha from "./component/AssetEditModalAlpha";
+import AssetEditModal from "./component/AssetEditModal";
 
 const AssetManager = ({ type, title = "Asset Manager" }) => {
   const {
@@ -234,7 +232,7 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
       </div>
 
       {/* Modular JSON Edit Modal */}
-      <AssetEditModalAlpha
+      <AssetEditModal
         selectedAsset={selectedAsset}
         onClose={handleCloseModal}
         editableData={editableData}
