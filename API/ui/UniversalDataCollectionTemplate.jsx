@@ -17,6 +17,7 @@ const UniversalDataCollectionTemplate = ({
   redirectTo = "/dashboard",
   onSuccessCallback = null,
 }) => {
+  
   const { user, loading: authLoading } = useContext(AuthContext);
   const router = useRouter();
 
