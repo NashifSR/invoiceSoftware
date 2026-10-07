@@ -15,5 +15,5 @@ const ManageSubscription = () => {
         </div>
     );
 };
-
+    
 export default ManageSubscription;

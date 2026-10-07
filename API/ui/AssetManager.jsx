@@ -1,9 +1,13 @@
 "use client";
 
 import { useMemo, useState, useEffect, useCallback } from "react";
-import { Search, X, Trash2, Save, Check, Loader2, AlertCircle } from "lucide-react";
+import { Search, Loader2, AlertCircle } from "lucide-react";
 
 import useAssets from "@/API/useAssets";
+import AssetTablePrime from "./component/AssetTablePrime";
+import AssetEditModal from "./component/AssetEditModal";
+import AssetTableAlpha from "./component/AssetTableAlpha";
+import AssetEditModalAlpha from "./component/AssetEditModalAlpha";
 
 const AssetManager = ({ type, title = "Asset Manager" }) => {
   const {
@@ -16,9 +20,6 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
     type,
   });
 
-  console.group("checking asset manager consumer",type , assets)
-  console.groupEnd()
-
   const [search, setSearch] = useState("");
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
@@ -29,7 +30,7 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   /* ============================================================
-      SEARCH FILTER
+     SEARCH FILTER
   ============================================================ */
 
   const filteredAssets = useMemo(() => {
@@ -53,7 +54,7 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
   }, [assets, search]);
 
   /* ============================================================
-      MODAL HANDLERS
+     MODAL HANDLERS
   ============================================================ */
 
   const handleOpenAsset = (asset) => {
@@ -72,20 +73,8 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
     setSaveSuccess(false);
   }, [saving]);
 
-  // Listen for 'Escape' key to close modal
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape" && selectedAsset) {
-        handleCloseModal();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedAsset, handleCloseModal]);
-
   /* ============================================================
-      UPDATE ASSET
+     UPDATE ASSET
   ============================================================ */
 
   const handleUpdate = async () => {
@@ -148,7 +137,7 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
   };
 
   /* ============================================================
-      DELETE ASSET
+     DELETE ASSET
   ============================================================ */
 
   const handleDelete = async (id, e) => {
@@ -181,7 +170,7 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
   };
 
   /* ============================================================
-      INITIAL LOADING STATE
+     INITIAL LOADING STATE
   ============================================================ */
 
   if (loading && assets.length === 0) {
@@ -235,200 +224,29 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
           </div>
         </div>
 
-        {/* Data Table */}
-        <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            {/* Header */}
-            <div className="grid min-w-[1000px] grid-cols-[200px_140px_1fr_180px_80px] border-b border-zinc-200 bg-zinc-50/70 px-4 py-3 text-xs font-semibold text-zinc-600">
-              <div>ID</div>
-              <div>Type</div>
-              <div>Data JSON</div>
-              <div>Created Date</div>
-              <div className="text-right">Actions</div>
-            </div>
-
-            {/* Empty State */}
-            {filteredAssets.length === 0 ? (
-              <div className="px-4 py-12 text-center text-sm text-zinc-500">
-                No matching assets found.
-              </div>
-            ) : (
-              filteredAssets.map((asset) => {
-                const recordId = asset.id || asset._id;
-                const isDeleting = deletingId === recordId;
-
-                return (
-                  <div
-                    key={recordId}
-                    onClick={() => handleOpenAsset(asset)}
-                    className="grid min-w-[1000px] w-full grid-cols-[200px_140px_1fr_180px_80px] items-center border-b border-zinc-100 px-4 py-3 text-left text-sm transition last:border-b-0 hover:bg-zinc-50/80 cursor-pointer"
-                  >
-                    {/* ID */}
-                    <div className="truncate pr-4 font-mono text-xs text-zinc-500">
-                      {recordId || "—"}
-                    </div>
-
-                    {/* Type */}
-                    <div className="truncate font-medium text-zinc-800">
-                      <span className="inline-flex items-center rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700">
-                        {asset.type || "—"}
-                      </span>
-                    </div>
-
-                    {/* Data Payload Preview */}
-                    <div className="truncate pr-4 font-mono text-xs text-zinc-500">
-                      {JSON.stringify(asset.data || {})}
-                    </div>
-
-                    {/* Created Date */}
-                    <div className="text-xs text-zinc-500">
-                      {asset.createdAt
-                        ? new Date(asset.createdAt).toLocaleString()
-                        : "—"}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="text-right">
-                      <button
-                        type="button"
-                        disabled={isDeleting}
-                        onClick={(e) => handleDelete(recordId, e)}
-                        className="rounded p-1.5 text-zinc-400 transition hover:bg-red-50 hover:text-red-600 focus:outline-none disabled:opacity-50"
-                        title="Delete Asset"
-                      >
-                        {isDeleting ? (
-                          <Loader2 size={15} className="animate-spin text-red-600" />
-                        ) : (
-                          <Trash2 size={15} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
+        {/* Modular Asset Table */}
+        <AssetTableAlpha
+          assets={filteredAssets}
+          onSelectAsset={handleOpenAsset}
+          onDeleteAsset={handleDelete}
+          deletingId={deletingId}
+        />
       </div>
 
-      {/* JSON Edit Modal */}
-      {selectedAsset && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
-          onClick={handleCloseModal}
-        >
-          <div
-            className="mx-auto flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl transition-all"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4">
-              <div>
-                <h3 className="text-sm font-semibold text-zinc-900">
-                  Edit {selectedAsset.type || "Asset"}
-                </h3>
-                <p className="mt-0.5 font-mono text-xs text-zinc-400">
-                  ID: {selectedAsset.id || selectedAsset._id || "—"}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                disabled={saving}
-                onClick={handleCloseModal}
-                className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 disabled:opacity-50"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="flex-1 overflow-auto p-6">
-              <div className="mb-2 flex items-center justify-between">
-                <label className="text-xs font-semibold text-zinc-700">
-                  Data JSON Editor
-                </label>
-                <span className="text-[11px] font-mono text-zinc-400">
-                  JSON Syntax
-                </span>
-              </div>
-
-              <textarea
-                value={editableData}
-                onChange={(e) => {
-                  setEditableData(e.target.value);
-                  if (saveError) setSaveError(null);
-                  if (saveSuccess) setSaveSuccess(false);
-                }}
-                spellCheck={false}
-                disabled={saving}
-                className="min-h-[420px] w-full resize-y rounded-lg border border-zinc-300 bg-zinc-900 p-4 font-mono text-xs leading-relaxed text-zinc-100 shadow-inner outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-60"
-              />
-
-              {/* Validation or API Error Banner */}
-              {saveError && (
-                <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs text-red-700">
-                  <AlertCircle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
-                  <span>{saveError}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Save Success Banner */}
-            {saveSuccess && (
-              <div className="flex items-center gap-2 border-t border-emerald-100 bg-emerald-50 px-6 py-2.5 text-xs text-emerald-700">
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-200">
-                  <Check size={11} className="text-emerald-800" />
-                </span>
-                <span>Asset data saved successfully.</span>
-              </div>
-            )}
-
-            {/* Modal Footer */}
-            <div className="flex items-center justify-between border-t border-zinc-200 bg-zinc-50/50 px-6 py-3.5">
-              <button
-                type="button"
-                disabled={saving}
-                onClick={(e) =>
-                  handleDelete(
-                    selectedAsset.id || selectedAsset._id,
-                    e
-                  )
-                }
-                className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
-              >
-                <Trash2 size={14} />
-                <span>Delete Asset</span>
-              </button>
-
-              <div className="flex items-center gap-2.5">
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={handleCloseModal}
-                  className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={handleUpdate}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {saving ? (
-                    <Loader2 size={14} className="animate-spin" />
-                  ) : (
-                    <Save size={14} />
-                  )}
-                  <span>{saving ? "Saving..." : "Save Changes"}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modular JSON Edit Modal */}
+      <AssetEditModalAlpha
+        selectedAsset={selectedAsset}
+        onClose={handleCloseModal}
+        editableData={editableData}
+        setEditableData={setEditableData}
+        onUpdate={handleUpdate}
+        onDelete={handleDelete}
+        saving={saving}
+        saveError={saveError}
+        saveSuccess={saveSuccess}
+        setSaveError={setSaveError}
+        setSaveSuccess={setSaveSuccess}
+      />
     </main>
   );
 };

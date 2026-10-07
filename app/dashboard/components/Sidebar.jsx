@@ -89,8 +89,7 @@ const sidebarSections = [
         label: "Clients",
         icon: Users,
         children: [
-          { label: "Client List", href: "/dashboard/clients" },
-          { label: "Add Client", href: "/dashboard/clients/add" },
+          { label: "Manage Clients", href: "/dashboard/clients/manageclients" },
           { label: "Signup Requests", href: "/dashboard/clients/signup-requests" },
           { label: "Left Clients", href: "/dashboard/clients/left" },
         ],
