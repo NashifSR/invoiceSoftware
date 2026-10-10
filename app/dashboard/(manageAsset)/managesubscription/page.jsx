@@ -4,16 +4,14 @@ import { useState } from "react";
 import AssetManager from "@/API/ui/AssetManager";
 
 const ManageSubscription = () => {
-
-    return (
-        <div>
-
-            <AssetManager
-                type="consumers"
-                title="Manage Subscription"
-            />
-        </div>
-    );
+  return (
+    <div>
+      <AssetManager
+        type="package"
+        title="Manage Subscriptions"
+      />
+    </div>
+  );
 };
-    
+
 export default ManageSubscription;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { X, Trash2, Save, Check, Loader2, AlertCircle } from "lucide-react";
+import { X, Trash2, Save, Check, Loader2, AlertCircle, Info } from "lucide-react";
 
 const AssetEditModal = ({
   selectedAsset,
@@ -15,6 +15,7 @@ const AssetEditModal = ({
   saveSuccess,
   setSaveError,
   setSaveSuccess,
+  tableColumns = [],
 }) => {
   // Listen for 'Escape' key to close modal
   useEffect(() => {
@@ -63,8 +64,29 @@ const AssetEditModal = ({
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-auto p-6">
-          <div className="mb-2 flex items-center justify-between">
+        <div className="flex-1 overflow-auto p-6 space-y-4">
+          {/* Schema Helper Guidance */}
+          {tableColumns.length > 0 && (
+            <div className="rounded-lg border border-blue-100 bg-blue-50/50 p-3 text-xs text-blue-900">
+              <div className="flex items-center gap-1.5 font-semibold mb-1.5">
+                <Info size={14} className="text-blue-600 shrink-0" />
+                <span>Valid Schema Keys for this type:</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {tableColumns.map((col) => (
+                  <span
+                    key={col.key}
+                    className="inline-flex items-center gap-1 rounded bg-white px-2 py-0.5 font-mono text-[11px] font-medium text-blue-800 border border-blue-200 shadow-2xs"
+                  >
+                    <span className="text-blue-500">{col.key}</span>
+                    <span className="text-zinc-400 font-sans">({col.label})</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between">
             <label className="text-xs font-semibold text-zinc-700">
               Data JSON Editor
             </label>
@@ -82,12 +104,12 @@ const AssetEditModal = ({
             }}
             spellCheck={false}
             disabled={saving}
-            className="min-h-[420px] w-full resize-y rounded-lg border border-zinc-300 bg-white p-4 font-mono text-xs leading-relaxed text-zinc-900 shadow-inner outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-60"
+            className="min-h-[360px] w-full resize-y rounded-lg border border-zinc-300 bg-white p-4 font-mono text-xs leading-relaxed text-zinc-900 shadow-inner outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-60"
           />
 
           {/* Validation or API Error Banner */}
           {saveError && (
-            <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs text-red-700">
+            <div className="flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs text-red-700">
               <AlertCircle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
               <span>{saveError}</span>
             </div>

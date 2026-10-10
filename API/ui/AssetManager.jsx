@@ -7,7 +7,7 @@ import useAssets from "@/API/useAssets";
 import AssetTableAlpha from "./component/AssetTableAlpha";
 import AssetEditModal from "./component/AssetEditModal";
 
-const AssetManager = ({ type, title = "Asset Manager" }) => {
+const AssetManager = ({ type, title = "Asset Manager", tableColumns = [] }) => {
   const {
     assets = [],
     loading,
@@ -222,13 +222,14 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
           </div>
         </div>
 
-        {/* Modular Asset Table */}
+        {/* Modular Asset Table with tableColumns passed down */}
         <AssetTableAlpha
           assets={filteredAssets}
+          tableColumns={tableColumns}
           onSelectAsset={handleOpenAsset}
           onDeleteAsset={handleDelete}
           deletingId={deletingId}
-        />
+          />
       </div>
 
       {/* Modular JSON Edit Modal */}
@@ -244,7 +245,8 @@ const AssetManager = ({ type, title = "Asset Manager" }) => {
         saveSuccess={saveSuccess}
         setSaveError={setSaveError}
         setSaveSuccess={setSaveSuccess}
-      />
+        tableColumns={tableColumns}
+        />
     </main>
   );
 };

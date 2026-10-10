@@ -158,7 +158,7 @@ export default function Navbar() {
 
                       <div className="p-1.5">
                         <Link
-                          href="/profile"
+                          href="/dashboard/profile"
                           onClick={() => setIsMenuOpen(false)}
                           className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
                         >
