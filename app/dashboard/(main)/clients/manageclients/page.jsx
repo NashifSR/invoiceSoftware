@@ -1,11 +1,22 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import UniversalDataCollectionTemplate from "@/API/ui/UniversalDataCollectionTemplate";
 import AssetManager from "@/API/ui/AssetManager";
 
-const ClientsPage = () => {
+const ManageClients = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Close modal on 'Escape' key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    if (isModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
 
   const fields = useMemo(
     () => [
@@ -115,8 +126,26 @@ const ClientsPage = () => {
         required: false,
         placeholder: "zone_north",
       },
+      {
+        name: "status",
+        label: "Account Status",
+        type: "select",
+        required: true,
+        options: [
+          { label: "Active", value: "active" },
+          { label: "Suspended (Due Bill)", value: "suspended" },
+          { label: "Pending Installation", value: "pending" },
+          { label: "Expired", value: "expired" },
+        ],
+      },
     ],
     []
+  );
+
+  // Auto-map table columns for AssetManager
+  const columns = useMemo(
+    () => fields.map((field) => ({ key: field.name, label: field.label })),
+    [fields]
   );
 
   return (
@@ -147,16 +176,26 @@ const ClientsPage = () => {
         <AssetManager
           type="client"
           title="Active Subscribers"
+          tableColumns={columns}
         />
       </div>
 
       {/* 3. Modal Popup for Universal Client Registration */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40">
-          <div className="relative w-full max-w-2xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="relative w-full max-w-2xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 id="modal-title" className="text-lg font-semibold text-gray-900">
                 Provision New ISP Client
               </h3>
               <button
@@ -187,4 +226,4 @@ const ClientsPage = () => {
   );
 };
 
-export default ClientsPage;
+export default ManageClients;

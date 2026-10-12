@@ -1,61 +1,70 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import UniversalDataCollectionTemplate from "@/API/ui/UniversalDataCollectionTemplate";
 import AssetManager from "@/API/ui/AssetManager";
+
+// Static configuration (Configuration-Driven UI pattern)
+const ZONE_FORM_FIELDS = [
+  {
+    name: "zoneId",
+    label: "Zone ID",
+    type: "text",
+    required: true,
+    placeholder: "e.g. zone_north",
+  },
+  {
+    name: "zoneName",
+    label: "Zone Name",
+    type: "text",
+    required: true,
+    placeholder: "e.g. Uttara Network Zone",
+  },
+  {
+    name: "serverRouterId",
+    label: "Primary Server / Router ID",
+    type: "text",
+    required: true,
+    placeholder: "e.g. srv_01",
+  },
+  {
+    name: "coverageArea",
+    label: "Coverage Area Description",
+    type: "text",
+    required: false,
+    placeholder: "e.g. Sector 1-13, Airport Road",
+  },
+  {
+    name: "status",
+    label: "Zone Operational Status",
+    type: "select",
+    required: true,
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Maintenance", value: "maintenance" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
+];
 
 const Zones = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fields = useMemo(
-    () => [
-      {
-        name: "zoneId",
-        label: "Zone ID",
-        type: "text",
-        required: true,
-        placeholder: "e.g. zone_north",
-      },
-      {
-        name: "zoneName",
-        label: "Zone Name",
-        type: "text",
-        required: true,
-        placeholder: "e.g. Uttara Network Zone",
-      },
-      {
-        name: "serverRouterId",
-        label: "Primary Server / Router ID",
-        type: "text",
-        required: true,
-        placeholder: "e.g. srv_01",
-      },
-      {
-        name: "coverageArea",
-        label: "Coverage Area Description",
-        type: "text",
-        required: false,
-        placeholder: "e.g. Sector 1-13, Airport Road",
-      },
-      {
-        name: "status",
-        label: "Zone Operational Status",
-        type: "select",
-        required: true,
-        options: [
-          { label: "Active", value: "active" },
-          { label: "Maintenance", value: "maintenance" },
-          { label: "Inactive", value: "inactive" },
-        ],
-      },
-    ],
-    []
-  );
+  // Close modal on 'Escape' key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    if (isModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
 
-  // Derive columns automatically from fields
+  // Derive columns automatically from the configuration fields
   const columns = useMemo(
-    () => fields.map((field) => ({ key: field.name, label: field.label })),
-    [fields]
+    () => ZONE_FORM_FIELDS.map((field) => ({ key: field.name, label: field.label })),
+    []
   );
 
   return (
@@ -90,13 +99,22 @@ const Zones = () => {
         />
       </div>
 
-      {/* 3. Modal Popup for Universal Zone Registration */}
+      {/* 3. Modal Popup with Backdrop Click & ARIA attributes */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40">
-          <div className="relative w-full max-w-2xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-xs"
+          onClick={() => setIsModalOpen(false)} // Close when clicking backdrop
+        >
+          <div 
+            className="relative w-full max-w-2xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal body
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 id="modal-title" className="text-lg font-semibold text-gray-900">
                 Register Network Zone
               </h3>
               <button
@@ -116,7 +134,7 @@ const Zones = () => {
                 description="Set up a physical zone record, server routing mapping, and coverage details."
                 type="zone"
                 business="isp"
-                fields={fields}
+                fields={ZONE_FORM_FIELDS}
                 onSuccess={() => setIsModalOpen(false)}
               />
             </div>

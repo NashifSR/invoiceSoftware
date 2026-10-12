@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Activity,
@@ -31,7 +32,7 @@ import {
   Cpu,
   Target,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import useAuth from "@/Auth/hooks/useAuth";
 
@@ -80,7 +81,7 @@ const sidebarSections = [
             label: "Bandwidth Management",
             href: "/dashboard/network/bandwidth",
           },
-          { label: "ONU Serial Mapping", href: "/dashboard/hardware/onus" },
+          { label: "ONU Serial Mapping", href: "/dashboard/network/onus" },
         ],
       },
       {
@@ -96,11 +97,11 @@ const sidebarSections = [
         label: "Operations & HR",
         icon: Briefcase,
         children: [
-          { label: "Support Tickets (ITSM)", href: "/dashboard/itsm" },
-          { label: "Inventory & Purchase", href: "/dashboard/purchase" },
+          { label: "Support Tickets (ITSM)", href: "/dashboard/operations/itsm" },
+          { label: "Inventory & Purchase", href: "/dashboard/operations/purchase" },
           {
             label: "Employees & Payroll",
-            href: "/dashboard/hr-payroll/employees",
+            href: "/dashboard/operations/employees",
           },
         ],
       },
@@ -125,11 +126,11 @@ const sidebarSections = [
         label: "Accounts & Billing",
         icon: Wallet,
         children: [
-          { label: "Billing List", href: "/dashboard/billing" },
-          { label: "Collection", href: "/dashboard/billing/collection" },
-          { label: "Billing History", href: "/dashboard/billing/history" },
-          { label: "Expenses", href: "/dashboard/accounting/expenses" },
-          { label: "Profit & Loss", href: "/dashboard/accounting/profit-loss" },
+          { label: "Billing List", href: "/dashboard/accounts/billing" },
+          { label: "Collection", href: "/dashboard/accounts/collection" },
+          { label: "Billing History", href: "/dashboard/accounts/history" },
+          { label: "Expenses", href: "/dashboard/accounts/expenses" },
+          { label: "Profit & Loss", href: "/dashboard/accounts/profit-loss" },
         ],
       },
       {
@@ -166,54 +167,49 @@ const Sidebar = () => {
 
   const { user, logout } = useAuth();
 
-  const [openMenus, setOpenMenus] = useState({});
+  // Track explicit manual open/close actions by the user
+  const [manualToggles, setManualToggles] = useState({});
 
   /* ==========================================================
-     AUTO OPEN ACTIVE MENU
-  ========================================================== */
-
-  useEffect(() => {
-    const activeMenus = {};
-
-    sidebarSections.forEach((section) => {
-      section.items.forEach((item) => {
-        if (item.children) {
-          const hasActiveChild = item.children.some(
-            (child) =>
-              pathname === child.href || pathname.startsWith(`${child.href}/`),
-          );
-
-          if (hasActiveChild) {
-            activeMenus[item.label] = true;
-          }
-        }
-      });
-    });
-
-    setOpenMenus((current) => ({
-      ...current,
-      ...activeMenus,
-    }));
-  }, [pathname]);
-
-  /* ==========================================================
-     TOGGLE MENU
+      TOGGLE MENU
   ========================================================== */
 
   const toggleMenu = (label) => {
-    setOpenMenus((current) => ({
+    const isOpen = isMenuOpen(label, sidebarSections);
+    setManualToggles((current) => ({
       ...current,
-      [label]: !current[label],
+      [label]: !isOpen,
     }));
   };
 
+  const isMenuOpen = (label, sections) => {
+    if (manualToggles[label] !== undefined) {
+      return manualToggles[label];
+    }
+
+    // Default: Open automatically if any child matches current path
+    let isOpen = false;
+    sections.forEach((section) => {
+      section.items.forEach((item) => {
+        if (item.label === label && item.children) {
+          isOpen = item.children.some((child) =>
+            child.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname === child.href || pathname.startsWith(`${child.href}/`)
+          );
+        }
+      });
+    });
+    return isOpen;
+  };
+
   /* ==========================================================
-     LOGOUT
+      LOGOUT
   ========================================================== */
 
   const handleLogout = async () => {
     try {
-      await logout();
+      if (logout) await logout();
       router.replace("/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -221,23 +217,19 @@ const Sidebar = () => {
   };
 
   /* ==========================================================
-     USER
+      USER
   ========================================================== */
 
   const displayName = user?.displayName || user?.email?.split("@")[0] || "User";
-
   const initial = displayName.charAt(0).toUpperCase();
 
   /* ==========================================================
-     RENDER
+      RENDER
   ========================================================== */
 
   return (
     <aside className="flex min-h-screen w-64 shrink-0 flex-col border-r border-zinc-200 bg-white">
-      {/* ====================================================
-          BRAND
-      ==================================================== */}
-
+      {/* BRAND */}
       <div className="flex h-16 shrink-0 items-center border-b border-zinc-100 px-5">
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-950 text-sm font-bold text-white">
@@ -248,7 +240,6 @@ const Sidebar = () => {
             <p className="text-lg font-bold leading-none tracking-tight text-zinc-950">
               ISP Admin
             </p>
-
             <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-zinc-400">
               Management Portal
             </p>
@@ -256,10 +247,7 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      {/* ====================================================
-          NAVIGATION
-      ==================================================== */}
-
+      {/* NAVIGATION */}
       <nav className="flex-1 overflow-y-auto px-3 py-5">
         {sidebarSections.map((section) => (
           <div key={section.label} className="mb-6 last:mb-0">
@@ -271,17 +259,14 @@ const Sidebar = () => {
               {section.items.map((item) => {
                 const Icon = item.icon;
 
-                /* ==============================================
-                    MENU WITH SUBMENU
-                ============================================== */
-
+                /* SUBMENU ITEM */
                 if (item.children) {
-                  const isOpen = openMenus[item.label] || false;
+                  const isOpen = isMenuOpen(item.label, sidebarSections);
 
-                  const hasActiveChild = item.children.some(
-                    (child) =>
-                      pathname === child.href ||
-                      pathname.startsWith(`${child.href}/`),
+                  const hasActiveChild = item.children.some((child) =>
+                    child.href === "/dashboard"
+                      ? pathname === "/dashboard"
+                      : pathname === child.href || pathname.startsWith(`${child.href}/`)
                   );
 
                   return (
@@ -289,16 +274,14 @@ const Sidebar = () => {
                       <button
                         type="button"
                         onClick={() => toggleMenu(item.label)}
-                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition cursor-pointer ${
                           hasActiveChild
                             ? "bg-zinc-100 text-zinc-950"
                             : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
                         }`}
                       >
                         <Icon size={17} />
-
                         <span className="flex-1 text-left">{item.label}</span>
-
                         <ChevronDown
                           size={15}
                           className={`transition-transform ${
@@ -307,14 +290,15 @@ const Sidebar = () => {
                         />
                       </button>
 
-                      {/* Submenu */}
-
+                      {/* Submenu Dropdown */}
                       {isOpen && (
                         <div className="ml-4 mt-1 space-y-1 border-l border-zinc-200 pl-3">
                           {item.children.map((child) => {
                             const isActive =
-                              pathname === child.href ||
-                              pathname.startsWith(`${child.href}/`);
+                              child.href === "/dashboard"
+                                ? pathname === "/dashboard"
+                                : pathname === child.href ||
+                                  pathname.startsWith(`${child.href}/`);
 
                             return (
                               <Link
@@ -336,13 +320,12 @@ const Sidebar = () => {
                   );
                 }
 
-                /* ==============================================
-                    NORMAL LINK
-                ============================================== */
-
+                /* NORMAL LINK ITEM */
                 const isActive =
-                  pathname === item.href ||
-                  pathname.startsWith(`${item.href}/`);
+                  item.href === "/dashboard"
+                    ? pathname === "/dashboard"
+                    : pathname === item.href ||
+                      pathname.startsWith(`${item.href}/`);
 
                 return (
                   <Link
@@ -355,7 +338,6 @@ const Sidebar = () => {
                     }`}
                   >
                     <Icon size={17} />
-
                     <span>{item.label}</span>
                   </Link>
                 );
@@ -365,20 +347,20 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      {/* ====================================================
-          USER
-      ==================================================== */}
-
+      {/* USER & LOGOUT */}
       <div className="shrink-0 border-t border-zinc-100 p-3">
         <Link
           href="/dashboard/profile"
           className="flex items-center gap-3 rounded-lg p-2.5 transition hover:bg-zinc-100"
         >
           {user?.photoURL ? (
-            <img
+            <Image
               src={user.photoURL}
               alt={displayName}
+              width={36}
+              height={36}
               className="h-9 w-9 shrink-0 rounded-full object-cover"
+              unoptimized
             />
           ) : (
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white">
@@ -390,19 +372,16 @@ const Sidebar = () => {
             <p className="truncate text-sm font-semibold text-zinc-900">
               {displayName}
             </p>
-
-            <p className="truncate text-xs text-zinc-500">{user?.email}</p>
+            <p className="truncate text-xs text-zinc-500">{user?.email || "admin@isp.com"}</p>
           </div>
 
           <User size={16} className="shrink-0 text-zinc-400" />
         </Link>
 
-        {/* Logout */}
-
         <button
           type="button"
           onClick={handleLogout}
-          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50 cursor-pointer"
         >
           <LogOut size={17} />
           Sign out
