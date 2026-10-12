@@ -31,6 +31,7 @@ import {
   Wifi,
   Cpu,
   Target,
+  CreditCard
 } from "lucide-react";
 import { useState } from "react";
 
@@ -153,6 +154,17 @@ const sidebarSections = [
           { label: "Audit Logs", href: "/dashboard/settings/audit-logs" },
         ],
       },
+      {
+        label: "SaaS Portal & Billing",
+        icon: CreditCard, // Ensure CreditCard is imported from lucide-react
+        children: [
+          { label: "Subscription Packages", href: "/dashboard/saasportal/subscriptionplans" },
+          { label: "Subscription History", href: "/dashboard/saasportal/subscriptionhistory" },
+          { label: "Invoices & History", href: "/dashboard/saasportal/invoices" },
+          { label: "Feature Requests & Bugs", href: "/dashboard/saasportal/requests" },
+          { label: "Suggestions & Feedback", href: "/dashboard/saasportal/feedback" },
+        ],
+      }
     ],
   },
 ];
@@ -274,19 +286,17 @@ const Sidebar = () => {
                       <button
                         type="button"
                         onClick={() => toggleMenu(item.label)}
-                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition cursor-pointer ${
-                          hasActiveChild
+                        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition cursor-pointer ${hasActiveChild
                             ? "bg-zinc-100 text-zinc-950"
                             : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
-                        }`}
+                          }`}
                       >
                         <Icon size={17} />
                         <span className="flex-1 text-left">{item.label}</span>
                         <ChevronDown
                           size={15}
-                          className={`transition-transform ${
-                            isOpen ? "rotate-180" : ""
-                          }`}
+                          className={`transition-transform ${isOpen ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
 
@@ -298,17 +308,16 @@ const Sidebar = () => {
                               child.href === "/dashboard"
                                 ? pathname === "/dashboard"
                                 : pathname === child.href ||
-                                  pathname.startsWith(`${child.href}/`);
+                                pathname.startsWith(`${child.href}/`);
 
                             return (
                               <Link
                                 key={child.href}
                                 href={child.href}
-                                className={`block rounded-md px-3 py-2 text-sm transition ${
-                                  isActive
+                                className={`block rounded-md px-3 py-2 text-sm transition ${isActive
                                     ? "bg-zinc-950 font-medium text-white"
                                     : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
-                                }`}
+                                  }`}
                               >
                                 {child.label}
                               </Link>
@@ -325,17 +334,16 @@ const Sidebar = () => {
                   item.href === "/dashboard"
                     ? pathname === "/dashboard"
                     : pathname === item.href ||
-                      pathname.startsWith(`${item.href}/`);
+                    pathname.startsWith(`${item.href}/`);
 
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                      isActive
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${isActive
                         ? "bg-zinc-950 text-white"
                         : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
-                    }`}
+                      }`}
                   >
                     <Icon size={17} />
                     <span>{item.label}</span>
