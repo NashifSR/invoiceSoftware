@@ -43,6 +43,25 @@ import useAuth from "@/Auth/hooks/useAuth";
 
 const sidebarSections = [
   {
+    label: "Research And Development",
+    items: [
+      {
+        label: "Testing & Sandbox",
+        icon: Settings,
+        children: [
+          { label: "Create Data", href: "/dashboard/createpackage" },
+          { label: "Asset Manager", href: "/dashboard/assetviewer" },
+          { label: "Packages", href: "/dashboard/checkoutpage" },
+          {
+            label: "Client Types & Protocols",
+            href: "/dashboard/payments",
+          },
+          { label: "Billing Status", href: "/dashboard/purchasesPage" },
+        ],
+      },
+    ],
+  },
+  {
     label: "ISP Center & Infrastructure",
     items: [
       {
@@ -287,8 +306,8 @@ const Sidebar = () => {
                         type="button"
                         onClick={() => toggleMenu(item.label)}
                         className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition cursor-pointer ${hasActiveChild
-                            ? "bg-zinc-100 text-zinc-950"
-                            : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+                          ? "bg-zinc-100 text-zinc-950"
+                          : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
                           }`}
                       >
                         <Icon size={17} />
@@ -315,8 +334,8 @@ const Sidebar = () => {
                                 key={child.href}
                                 href={child.href}
                                 className={`block rounded-md px-3 py-2 text-sm transition ${isActive
-                                    ? "bg-zinc-950 font-medium text-white"
-                                    : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
+                                  ? "bg-zinc-950 font-medium text-white"
+                                  : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
                                   }`}
                               >
                                 {child.label}
@@ -341,8 +360,8 @@ const Sidebar = () => {
                     key={item.href}
                     href={item.href}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${isActive
-                        ? "bg-zinc-950 text-white"
-                        : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+                      ? "bg-zinc-950 text-white"
+                      : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
                       }`}
                   >
                     <Icon size={17} />
