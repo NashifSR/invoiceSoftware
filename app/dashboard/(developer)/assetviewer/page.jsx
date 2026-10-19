@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import useAssets from "@/API/useAssets";
+import AssetManager from "@/API/ui/AssetManager";
 
 const AssetViewer = ({ type }) => {
     const {
@@ -145,8 +146,8 @@ const AssetViewer = ({ type }) => {
                                     <div className="text-right text-xs text-zinc-500">
                                         {asset.createdAt
                                             ? new Date(
-                                                  asset.createdAt
-                                              ).toLocaleString()
+                                                asset.createdAt
+                                            ).toLocaleString()
                                             : "—"}
                                     </div>
                                 </div>

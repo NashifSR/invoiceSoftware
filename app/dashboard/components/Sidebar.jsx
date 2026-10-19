@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  Building2,
   Activity,
   Bell,
   Briefcase,
@@ -173,19 +174,35 @@ const sidebarSections = [
           { label: "Audit Logs", href: "/dashboard/settings/audit-logs" },
         ],
       },
+    ],
+  },
+  {
+    label: "Platform Account",
+    items: [
       {
-        label: "SaaS Portal & Billing",
-        icon: CreditCard, // Ensure CreditCard is imported from lucide-react
+        label: "Business Profile",
+        icon: Building2, // Imported from lucide-react
+        href: "/dashboard/saasportal/profile",
+      },
+      {
+        label: "Portal & Billing",
+        icon: CreditCard,
         children: [
-          { label: "Subscription Packages", href: "/dashboard/saasportal/subscriptionplans" },
+          { label: "Subscription Plans", href: "/dashboard/saasportal/subscriptionplans" },
           { label: "Subscription History", href: "/dashboard/saasportal/subscriptionhistory" },
           { label: "Invoices & History", href: "/dashboard/saasportal/invoices" },
+        ],
+      },
+      {
+        label: "Support & Feedback",
+        icon: MessageSquare,
+        children: [
           { label: "Feature Requests & Bugs", href: "/dashboard/saasportal/requests" },
           { label: "Suggestions & Feedback", href: "/dashboard/saasportal/feedback" },
         ],
-      }
+      },
     ],
-  },
+  }
 ];
 
 /* ============================================================

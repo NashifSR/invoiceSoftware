@@ -23,6 +23,7 @@ const AssetTableAlpha = ({ assets, tableColumns = [], onSelectAsset }) => {
   return (
     <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm w-full">
       <div className="overflow-x-auto">
+        Alpha
         <table className="w-full text-left border-collapse">
           {/* Table Header */}
           <thead>

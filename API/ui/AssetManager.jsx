@@ -5,9 +5,12 @@ import { Search, Loader2, AlertCircle } from "lucide-react";
 
 import useAssets from "@/API/useAssets";
 import AssetTableAlpha from "./component/AssetTableAlpha";
-import AssetEditModal from "./component/AssetEditModal";
+import AssetTablePrime from "./component/AssetTablePrime";
+import AssetEditModalPrime from "./component/AssetEditModalPrime";
+import AssetEditModalAlpha from "./component/AssetEditModalAlpha";
 
-const AssetManager = ({ type, title = "Asset Manager", tableColumns = [] }) => {
+const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   TableComponent,
+  ModalComponent, }) => {
   const {
     assets = [],
     loading,
@@ -125,8 +128,8 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [] }) => {
 
       setSaveError(
         err?.response?.data?.error ||
-          err?.message ||
-          "An unexpected error occurred while saving."
+        err?.message ||
+        "An unexpected error occurred while saving."
       );
       setSaveSuccess(false);
     } finally {
@@ -223,30 +226,92 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [] }) => {
         </div>
 
         {/* Modular Asset Table with tableColumns passed down */}
-        <AssetTableAlpha
-          assets={filteredAssets}
-          tableColumns={tableColumns}
-          onSelectAsset={handleOpenAsset}
-          onDeleteAsset={handleDelete}
-          deletingId={deletingId}
-          />
+        {(() => {
+          switch (TableComponent) {
+            case "prime":
+              return (
+                <AssetTablePrime
+                  assets={filteredAssets}
+                  tableColumns={tableColumns}
+                  onSelectAsset={handleOpenAsset}
+                  onDeleteAsset={handleDelete}
+                  deletingId={deletingId}
+                />
+              );
+            // case "beta":
+            //   return (
+            //     <AssetTableBeta
+            //       assets={filteredAssets}
+            //       tableColumns={tableColumns}
+            //       onSelectAsset={handleOpenAsset}
+            //       onDeleteAsset={handleDelete}
+            //       deletingId={deletingId}
+            //     />
+            //   );
+            // case "gamma":
+            //   return (
+            //     <AssetTableGamma
+            //       assets={filteredAssets}
+            //       tableColumns={tableColumns}
+            //       onSelectAsset={handleOpenAsset}
+            //       onDeleteAsset={handleDelete}
+            //       deletingId={deletingId}
+            //     />
+            //   );
+            default:
+              return (
+                <AssetTableAlpha
+                  assets={filteredAssets}
+                  tableColumns={tableColumns}
+                  onSelectAsset={handleOpenAsset}
+                  onDeleteAsset={handleDelete}
+                  deletingId={deletingId}
+                />
+              );
+          }
+        })()}
       </div>
 
       {/* Modular JSON Edit Modal */}
-      <AssetEditModal
-        selectedAsset={selectedAsset}
-        onClose={handleCloseModal}
-        editableData={editableData}
-        setEditableData={setEditableData}
-        onUpdate={handleUpdate}
-        onDelete={handleDelete}
-        saving={saving}
-        saveError={saveError}
-        saveSuccess={saveSuccess}
-        setSaveError={setSaveError}
-        setSaveSuccess={setSaveSuccess}
-        tableColumns={tableColumns}
-        />
+      {/* Modular Edit Modal Switch */}
+      {(() => {
+        switch (ModalComponent) {
+          case "alpha":
+            return (
+              <AssetEditModalAlpha
+                selectedAsset={selectedAsset}
+                onClose={handleCloseModal}
+                editableData={editableData}
+                setEditableData={setEditableData}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+                saving={saving}
+                saveError={saveError}
+                saveSuccess={saveSuccess}
+                setSaveError={setSaveError}
+                setSaveSuccess={setSaveSuccess}
+                tableColumns={tableColumns}
+              />
+            );
+          default:
+            return (
+              <AssetEditModalPrime
+                selectedAsset={selectedAsset}
+                onClose={handleCloseModal}
+                editableData={editableData}
+                setEditableData={setEditableData}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+                saving={saving}
+                saveError={saveError}
+                saveSuccess={saveSuccess}
+                setSaveError={setSaveError}
+                setSaveSuccess={setSaveSuccess}
+                tableColumns={tableColumns}
+              />
+            );
+        }
+      })()}
     </main>
   );
 };
