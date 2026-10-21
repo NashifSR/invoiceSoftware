@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import AssetForm from "@/API/ui/AssetForm";
 import { AuthContext } from "@/Auth/context/AuthContext";
+import useAssets from "@/API/useAssets";
 
 const UniversalDataCollectionTemplate = ({
   initialData = {},
@@ -17,9 +18,11 @@ const UniversalDataCollectionTemplate = ({
   redirectTo = "/dashboard",
   onSuccessCallback = null,
 }) => {
-  
   const { user, loading: authLoading } = useContext(AuthContext);
   const router = useRouter();
+
+  // Automatically fetch profileId in the background (null when creating the profile itself)
+  const { profileId } = useAssets({ type: "isp_business_profile" });
 
   // ============================================================
   // AUTH LOADING STATE
@@ -38,10 +41,8 @@ const UniversalDataCollectionTemplate = ({
   // ============================================================
   // ASSET METADATA
   // ============================================================
-  //
-  // Controls ownership and tracking properties while allowing
-  // AssetForm to deal solely with editable record payload.
-  //
+  // Controls ownership, relational linking, and tracking properties 
+  // while allowing AssetForm to deal solely with editable record payload.
   // ============================================================
   const buildMetadata = (isUpdate = false) => {
     const now = new Date().toISOString();
@@ -51,6 +52,8 @@ const UniversalDataCollectionTemplate = ({
       ownerId: user?.uid || null,
       type,
       business,
+      // Automatically attach businessProfileId if it exists and this isn't the profile itself
+      ...(type !== "isp_business_profile" && profileId && { businessProfileId: profileId }),
       access: [
         {
           email: user?.email || null,

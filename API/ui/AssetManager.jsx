@@ -9,8 +9,13 @@ import AssetTablePrime from "./component/AssetTablePrime";
 import AssetEditModalPrime from "./component/AssetEditModalPrime";
 import AssetEditModalAlpha from "./component/AssetEditModalAlpha";
 
-const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   TableComponent,
-  ModalComponent, }) => {
+const AssetManager = ({
+  type,
+  title = "Asset Manager",
+  tableColumns = [],
+  TableComponent,
+  ModalComponent,
+}) => {
   const {
     assets = [],
     loading,
@@ -87,7 +92,9 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   Tabl
       parsedData = JSON.parse(editableData);
     } catch (err) {
       setSaveSuccess(false);
-      setSaveError("Invalid JSON structure. Please fix formatting before saving.");
+      setSaveError(
+        "Invalid JSON structure. Please fix formatting before saving.",
+      );
       return;
     }
 
@@ -113,14 +120,14 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   Tabl
         "data",
         JSON.stringify({
           data: parsedData,
-        })
+        }),
       );
 
       const updatedAsset = await updateAsset(targetId, formData);
 
       setSelectedAsset(updatedAsset);
       setEditableData(
-        JSON.stringify(updatedAsset?.data || parsedData, null, 2)
+        JSON.stringify(updatedAsset?.data || parsedData, null, 2),
       );
       setSaveSuccess(true);
     } catch (err) {
@@ -128,8 +135,8 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   Tabl
 
       setSaveError(
         err?.response?.data?.error ||
-        err?.message ||
-        "An unexpected error occurred while saving."
+          err?.message ||
+          "An unexpected error occurred while saving.",
       );
       setSaveSuccess(false);
     } finally {
@@ -146,7 +153,9 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   Tabl
       e.stopPropagation();
     }
 
-    if (!window.confirm("Are you sure you want to permanently delete this asset?")) {
+    if (
+      !window.confirm("Are you sure you want to permanently delete this asset?")
+    ) {
       return;
     }
 
@@ -204,7 +213,9 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   Tabl
         {error && (
           <div className="mb-4 flex items-center gap-2.5 rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs text-red-700">
             <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
-            <span>{error.message || "Failed to fetch assets from server."}</span>
+            <span>
+              {error.message || "Failed to fetch assets from server."}
+            </span>
           </div>
         )}
 
@@ -238,26 +249,6 @@ const AssetManager = ({ type, title = "Asset Manager", tableColumns = [],   Tabl
                   deletingId={deletingId}
                 />
               );
-            // case "beta":
-            //   return (
-            //     <AssetTableBeta
-            //       assets={filteredAssets}
-            //       tableColumns={tableColumns}
-            //       onSelectAsset={handleOpenAsset}
-            //       onDeleteAsset={handleDelete}
-            //       deletingId={deletingId}
-            //     />
-            //   );
-            // case "gamma":
-            //   return (
-            //     <AssetTableGamma
-            //       assets={filteredAssets}
-            //       tableColumns={tableColumns}
-            //       onSelectAsset={handleOpenAsset}
-            //       onDeleteAsset={handleDelete}
-            //       deletingId={deletingId}
-            //     />
-            //   );
             default:
               return (
                 <AssetTableAlpha

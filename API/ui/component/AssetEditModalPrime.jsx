@@ -136,7 +136,7 @@ const AssetEditModalPrime = ({
           <div>
             <h3 className="text-sm font-semibold text-zinc-900 flex items-center gap-2">
               <Layers size={16} className="text-zinc-500" />
-              Edit Record Prime ({selectedAsset.type || "Asset"})
+              Edit Record ({selectedAsset.type || "Asset"})
             </h3>
             <p className="mt-0.5 font-mono text-xs text-zinc-400">
               ID: {recordId || "—"}

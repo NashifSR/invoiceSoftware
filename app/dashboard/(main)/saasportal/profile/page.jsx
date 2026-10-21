@@ -136,33 +136,6 @@ const BusinessProfile = () => {
 
   return (
     <div className="mx-auto max-w-7xl p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* 1. Page Header with Conditional Action Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-            Business Profiles & ISP Nodes
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage regional business branches, regulatory credentials, payment gateways, and node identities.
-          </p>
-        </div>
-
-        {/* Disable button if profile already exists */}
-        <button
-          onClick={() => !hasExistingProfile && setIsModalOpen(true)}
-          disabled={hasExistingProfile || loading}
-          className={`inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-lg shadow-sm transition-colors gap-2 shrink-0 ${hasExistingProfile
-              ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-            }`}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-          </svg>
-          {hasExistingProfile ? "Profile Configured" : "Add Business Profile"}
-        </button>
-      </div>
-
       {/* 2. Single Active Profile Card Viewer */}
       {loading ? (
         <div className="bg-white p-8 rounded-xl border border-gray-200 text-center text-gray-500 text-sm animate-pulse">
@@ -185,7 +158,7 @@ const BusinessProfile = () => {
           type="isp_business_profile"
           title="Configured ISP Profiles & Branches"
           tableColumns={columns}
-          TableComponent="prime"
+          TableComponent="alpha"
           ModalComponent="alpha"
         />
       </div>

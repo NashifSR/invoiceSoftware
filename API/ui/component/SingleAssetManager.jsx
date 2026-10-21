@@ -21,6 +21,8 @@ const SingleAssetManager = ({
         deleteAsset,
     } = useAssets({ type });
 
+    console.group("modal comp",ModalComponent);
+
     // Grab the single record (first item)
     const asset = assets[0] || null;
 
@@ -216,7 +218,7 @@ const SingleAssetManager = ({
             {/* Modular Edit Modal */}
             {(() => {
                 switch (ModalComponent) {
-                    case "alpha":
+                    case "prime":
                         return (
                             <AssetEditModalPrime
                                 selectedAsset={selectedAsset}
